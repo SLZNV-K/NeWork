@@ -1,3 +1,26 @@
 <resources>
-    <string name="app_name">NeWork</string>
+    <string name="app_name" translatable="false">NeWork</string>
+    <string name="posts">Posts</string>
+    <string name="events">Events</string>
+    <string name="users">Users</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="don_t_have_an_account">Don\'t have an account? Register</string>
+    <string name="name">Name</string>
+    <string name="description_user_s_avatar">User\'s Avatar</string>
+    <string name="add_button">Add Button</string>
+    <string name="remove">Remove</string>
+    <string name="new_post">New post</string>
+    <string name="post">Post</string>
+    <string name="likes">Likes</string>
+    <string name="mentioned">Mentioned</string>
+    <string name="description_materials_attached_to_the_post">Materials attached to the post</string>
+    <string name="description_event_broadcast_start_button">Event broadcast start button</string>
+    <string name="description_take_photo_button">Photo take button</string>
+    <string name="description_save_button">Save button</string>
+    <string name="description_choose_users_button">User selection button</string>
+    <string name="description_lication_button">Location button</string>
+    <string name="description_take_attachment_button">Take attachment button</string>
+    <string name="description_share_button">Share button</string>
+    <string name="description_account_button">Account button</string>
 </resources>
