@@ -6,17 +6,34 @@
     app:startDestination="@id/postsFeedFragment">
     <fragment
         android:id="@+id/postsFeedFragment"
-        android:name="com.github.slznvk.nework.PostsFeedFragment"
+        android:name="com.github.slznvk.nework.ui.PostsFeedFragment"
         android:label="fragment_posts_feed"
-        tools:layout="@layout/fragment_posts_feed" />
+        tools:layout="@layout/fragment_posts_feed" >
+        <action
+            android:id="@+id/action_postsFeedFragment_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/eventsFeedFragment"
-        android:name="com.github.slznvk.nework.EventsFeedFragment"
+        android:name="com.github.slznvk.nework.ui.EventsFeedFragment"
         android:label="fragment_events_feed"
         tools:layout="@layout/fragment_events_feed" />
     <fragment
         android:id="@+id/usersFragment"
-        android:name="com.github.slznvk.nework.UsersFragment"
+        android:name="com.github.slznvk.nework.ui.UsersFragment"
         android:label="fragment_users"
         tools:layout="@layout/fragment_users" />
+    <fragment
+        android:id="@+id/newPostFragment"
+        android:name="com.github.slznvk.nework.ui.NewPostFragment"
+        android:label="fragment_new_post"
+        tools:layout="@layout/fragment_new_post" />
+    <fragment
+        android:id="@+id/postDetailsFragment"
+        android:name="com.github.slznvk.nework.ui.PostDetailsFragment"
+        android:label="fragment_post_details"
+        tools:layout="@layout/fragment_post_details" />
 </navigation>

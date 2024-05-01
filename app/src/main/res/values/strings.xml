@@ -23,4 +23,8 @@
     <string name="description_take_attachment_button">Take attachment button</string>
     <string name="description_share_button">Share button</string>
     <string name="description_account_button">Account button</string>
+    <string name="retry">Retry</string>
+    <string name="error_of_loading">Error of loading</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
 </resources>

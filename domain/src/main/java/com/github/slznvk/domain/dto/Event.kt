@@ -1,7 +1,7 @@
 package com.github.slznvk.domain.dto
 
 data class Event(
-    val attachment: Attachment,
+    val attachment: Attachment?,
     val author: String,
     val authorAvatar: String,
     val authorId: Int,
@@ -12,11 +12,11 @@ data class Event(
     val id: Int,
     val likeOwnerIds: List<Int>,
     val likedByMe: Boolean,
-    val link: String,
+    val link: String?,
     val participantsIds: List<Int>,
     val participatedByMe: Boolean,
     val published: String,
     val speakerIds: List<Int>,
     val type: String,
-    val users: Users
-)
+    val users: Map<String, AdditionalProp>
+) : ListItem

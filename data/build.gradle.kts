@@ -34,6 +34,13 @@ android {
 
 dependencies {
 
+
+    implementation(project(":domain"))
+
+    implementation(libs.javax.inject)
+    api(libs.gson)
+    api(libs.retrofit2.gson)
+
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

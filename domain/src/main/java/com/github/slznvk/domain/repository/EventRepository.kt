@@ -1,9 +1,9 @@
-package com.github.slznvk.domain
+package com.github.slznvk.domain.repository
 
 import com.github.slznvk.domain.dto.Event
 
 interface EventRepository {
-    val data: List<Event>
+    suspend fun getAllEvents(): List<Event>
     suspend fun likeById(id: Long)
     suspend fun dislikeById(id: Long)
     suspend fun shareById(id: Long)

@@ -16,7 +16,7 @@
         android:layout_alignParentEnd="true"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_main"
-        tools:context=".activity.AppActivity" />
+        tools:context=".activity.MainActivity" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".NewPostFragment">
+    tools:context=".ui.NewPostFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -32,7 +32,7 @@
             tools:layout_editor_absoluteY="8dp" />
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <TextView
+    <EditText
         android:id="@+id/newContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,9 +41,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:text="@tools:sample/lorem[34]"
-        tools:ignore="VisualLintLongText" />
+        tools:ignore="VisualLintLongText"
+        android:inputType="textMultiLine"
+        android:hint="@string/new_post"
+        android:importantForAutofill="no" />
 
     <FrameLayout
+        android:id="@+id/attachmentFrame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_spacing"
@@ -53,6 +57,7 @@
         app:layout_constraintTop_toBottomOf="@id/newContent">
 
         <ImageView
+            android:id="@+id/attachment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"

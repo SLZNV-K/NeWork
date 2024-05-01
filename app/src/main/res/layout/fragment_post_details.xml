@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".PostDetailsFragment">
+    tools:context=".ui.PostDetailsFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -183,6 +183,7 @@
             </LinearLayout>
 
             <com.yandex.mapkit.mapview.MapView
+                android:id="@+id/mapView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"

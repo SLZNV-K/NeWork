@@ -23,4 +23,8 @@
     <string name="description_take_attachment_button">Кнопка прикрепения файлов</string>
     <string name="description_share_button">Кнопка поделиться</string>
     <string name="description_account_button">Кнопка аккаунта</string>
+    <string name="retry">Повторить</string>
+    <string name="error_of_loading">Ошибка загрузки</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
 </resources>
