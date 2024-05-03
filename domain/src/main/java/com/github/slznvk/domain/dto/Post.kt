@@ -1,19 +1,19 @@
 package com.github.slznvk.domain.dto
 
 data class Post(
-    val attachment: Attachment?,
+    val attachment: Attachment? = null,
     val author: String,
-    val authorAvatar: String,
+    val authorAvatar: String? = null,
     val authorId: Int,
-    val authorJob: String?,
+    val authorJob: String? = null,
     val content: String,
-    val coords: Coords?,
-    val id: Int,
+    val coords: Coords? = null,
+    override val id: Int,
     val likeOwnerIds: List<Int>,
-    val likedByMe: Boolean,
-    val link: String?,
+    val likedByMe: Boolean = false,
+    val link: String? = null,
     val mentionIds: List<Int>,
-    val mentionedMe: Boolean,
+    val mentionedMe: Boolean = false,
     val published: String,
-    val users: Users
+    val users: Users? = null
 ) : ListItem

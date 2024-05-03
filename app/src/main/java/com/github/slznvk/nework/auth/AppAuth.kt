@@ -1,7 +1,7 @@
 package com.github.slznvk.nework.auth
 
 import android.content.Context
-import com.github.slznvk.data.ApiService
+import com.github.slznvk.data.api.ApiService
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext

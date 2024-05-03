@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.github.slznvk.nework"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -69,7 +69,6 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
-
     }
 }
 kapt {
@@ -81,6 +80,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
+    implementation(libs.androidx.paging.runtime)
     implementation(libs.imagepicker)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.glide)

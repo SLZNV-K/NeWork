@@ -1,77 +1,66 @@
 package com.github.slznvk.nework.adapter
 
 import android.view.View
-import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import com.github.slznvk.domain.dto.Event
 import com.github.slznvk.domain.dto.ListItem
-import com.github.slznvk.domain.dto.Post
 import com.github.slznvk.domain.dto.User
-import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.CardEventBinding
-import com.github.slznvk.nework.databinding.CardPostBinding
 import com.github.slznvk.nework.databinding.CardUserBinding
 import com.github.slznvk.nework.utills.load
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-interface OnInteractionListener {
-    fun onLike(item: ListItem)
-    fun onRemove(item: ListItem)
-    fun onEdit(item: ListItem)
-    fun onItem(item: ListItem)
-}
-
 object AdapterDelegates {
 
-    fun postsDelegate(onInteractionListener: OnInteractionListener) =
-        adapterDelegateViewBinding<Post, ListItem, CardPostBinding>(
-            { layoutInflater, root -> CardPostBinding.inflate(layoutInflater, root, false) }
-        ) {
-            binding.root.setOnClickListener {
-                onInteractionListener.onItem(item)
-            }
-
-            binding.menu.setOnClickListener {
-                PopupMenu(context, it).apply {
-                    inflate(R.menu.options_menu)
-                    setOnMenuItemClickListener { menuItem ->
-                        when (menuItem.itemId) {
-                            R.id.edit -> {
-                                onInteractionListener.onEdit(item)
-                                true
-                            }
-
-                            R.id.delete -> {
-                                onInteractionListener.onRemove(item)
-                                true
-                            }
-
-                            else -> false
-                        }
-                    }
-                }
-            }
-
-            bind {
-                binding.apply {
-                    avatar.load(item.authorAvatar, true)
-                    author.text = item.author
-                    published.text = formatDateTime(item.published)
-
-                    if (item.attachment != null) {
-                        attachment.load(item.attachment!!.url)
-                        attachment.visibility = View.VISIBLE
-                    } else {
-                        attachment.visibility = View.GONE
-                    }
-
-                    content.text = item.content
-                    likeButton.text = item.likeOwnerIds.size.toString()
-                }
-            }
-        }
+//    fun postsDelegate(onInteractionListener: OnInteractionListener?) =
+//        adapterDelegateViewBinding<Post, ListItem, CardPostBinding>(
+//            { layoutInflater, root -> CardPostBinding.inflate(layoutInflater, root, false) }
+//        ) {
+//            binding.root.setOnClickListener {
+//                onInteractionListener!!.onItem(item)
+//            }
+//
+//            binding.menu.setOnClickListener {
+//                PopupMenu(context, it).apply {
+//                    inflate(R.menu.options_menu)
+//                    setOnMenuItemClickListener { menuItem ->
+//                        when (menuItem.itemId) {
+//                            R.id.edit -> {
+//                                onInteractionListener!!.onEdit(item)
+//                                true
+//                            }
+//
+//                            R.id.delete -> {
+//                                onInteractionListener!!.onRemove(item)
+//                                true
+//                            }
+//
+//                            else -> false
+//                        }
+//                    }
+//                }
+//            }
+//
+//            bind {
+//                binding.apply {
+//                    avatar.load(item.authorAvatar, true)
+//                    author.text = item.author
+//                    published.text = formatDateTime(item.published)
+//
+//                    if (item.attachment != null) {
+//                        attachment.load(item.attachment!!.url)
+//                        attachment.visibility = View.VISIBLE
+//                    } else {
+//                        attachment.visibility = View.GONE
+//                    }
+//
+//                    content.text = item.content
+//                    likeButton.text = item.likeOwnerIds.size.toString()
+//                }
+//            }
+//        }
 
     fun usersDelegate() = adapterDelegateViewBinding<User, ListItem, CardUserBinding>(
         { layoutInflater, root -> CardUserBinding.inflate(layoutInflater, root, false) }

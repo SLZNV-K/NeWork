@@ -1,6 +1,6 @@
 package com.github.slznvk.nework.di
 
-import com.github.slznvk.data.ApiService
+import com.github.slznvk.data.api.ApiService
 import com.yandex.maps.mobile.BuildConfig
 import dagger.Module
 import dagger.Provides

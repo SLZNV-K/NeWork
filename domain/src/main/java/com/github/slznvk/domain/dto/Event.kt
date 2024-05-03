@@ -9,7 +9,7 @@ data class Event(
     val content: String,
     val coords: Coords,
     val datetime: String,
-    val id: Int,
+    override val id: Int,
     val likeOwnerIds: List<Int>,
     val likedByMe: Boolean,
     val link: String?,

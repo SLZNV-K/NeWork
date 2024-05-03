@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("kapt")
 }
 
 android {
@@ -8,7 +9,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -32,11 +33,18 @@ android {
     }
 }
 
-dependencies {
+kapt {
+    correctErrorTypes = true
+}
 
+dependencies {
 
     implementation(project(":domain"))
 
+    api(libs.androidx.room.paging)
+    api(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    api(libs.androidx.room.ktx)
     implementation(libs.javax.inject)
     api(libs.gson)
     api(libs.retrofit2.gson)

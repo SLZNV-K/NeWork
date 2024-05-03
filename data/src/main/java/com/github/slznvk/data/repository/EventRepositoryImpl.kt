@@ -1,5 +1,6 @@
-package com.github.slznvk.data
+package com.github.slznvk.data.repository
 
+import com.github.slznvk.data.api.ApiService
 import com.github.slznvk.domain.dto.Event
 import com.github.slznvk.domain.repository.EventRepository
 import javax.inject.Inject

@@ -1,5 +1,6 @@
-package com.github.slznvk.data
+package com.github.slznvk.data.repository
 
+import com.github.slznvk.data.api.ApiService
 import com.github.slznvk.domain.dto.User
 import com.github.slznvk.domain.repository.UserRepository
 import javax.inject.Inject

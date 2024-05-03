@@ -1,6 +1,6 @@
 package com.github.slznvk.nework.di
 
-import com.github.slznvk.data.PostRepositoryImpl
+import com.github.slznvk.data.repository.PostRepositoryImpl
 import com.github.slznvk.domain.repository.PostRepository
 import dagger.Binds
 import dagger.Module

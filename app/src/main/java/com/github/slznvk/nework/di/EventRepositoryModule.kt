@@ -1,6 +1,6 @@
 package com.github.slznvk.nework.di
 
-import com.github.slznvk.data.EventRepositoryImpl
+import com.github.slznvk.data.repository.EventRepositoryImpl
 import com.github.slznvk.domain.repository.EventRepository
 import dagger.Binds
 import dagger.Module
