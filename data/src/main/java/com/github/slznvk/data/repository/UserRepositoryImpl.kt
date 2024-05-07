@@ -9,14 +9,14 @@ class UserRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ) : UserRepository {
     override suspend fun getAllUsers(): List<User> {
-       return try {
-           val response = apiService.getAllUsers()
-           if (!response.isSuccessful){
-               throw Exception()
-           }
-           response.body() ?: throw Exception()
-       } catch (e: Exception){
-           throw e
-       }
+        return try {
+            val response = apiService.getAllUsers()
+            if (!response.isSuccessful) {
+                throw Exception()
+            }
+            response.body() ?: throw Exception()
+        } catch (e: Exception) {
+            throw e
+        }
     }
 }

@@ -27,4 +27,16 @@
     <string name="error_of_loading">Error of loading</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="sign_in">Sign In</string>
+    <string name="to_interact_with_posts_you_need_to_log_in">To interact with posts, you need to log in</string>
+    <string name="cancel">Cancel</string>
+    <string name="looking_for_a_job">Looking for a job</string>
+    <string name="registration">Registration</string>
+    <string name="have_an_account">Already have an account? Sign in</string>
+    <string name="passwordCheck">Password check</string>
+    <string name="passwords_don_t_match">Passwords don\'t match</string>
+    <string name="fields_cannot_be_empty">Fields can\'t be empty</string>
+    <string name="invalid_login">Invalid login</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="a_user_with_this_username_already_exists">A user with this username already exists</string>
 </resources>

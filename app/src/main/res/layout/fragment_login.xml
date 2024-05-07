@@ -48,14 +48,14 @@
         android:text="@string/login"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/noAccount"
+        app:layout_constraintBottom_toTopOf="@id/regiatrationButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
         tools:ignore="VisualLintButtonSize" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/noAccount"
+        android:id="@+id/regiatrationButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/reduce_spacing"

@@ -1,6 +1,8 @@
 package com.github.slznvk.nework.di
 
 import com.github.slznvk.data.api.ApiService
+import com.github.slznvk.nework.BuildConfig.SERVER_API_KEY
+import com.github.slznvk.nework.auth.AppAuth
 import com.yandex.maps.mobile.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -31,11 +33,21 @@ class ApiModule {
     @Singleton
     fun provideOkHttp(
         logging: HttpLoggingInterceptor,
+        appAuth: AppAuth
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(logging)
         .addInterceptor { chain ->
+            appAuth.authState.value.token?.let { token ->
+                val newRequest = chain.request().newBuilder()
+                    .addHeader("Authorization", token)
+                    .build()
+                return@addInterceptor chain.proceed(newRequest)
+            }
+            chain.proceed(chain.request())
+        }
+        .addInterceptor { chain ->
             val newRequest = chain.request().newBuilder()
-                .addHeader("Api-Key", com.github.slznvk.nework.BuildConfig.SERVER_API_KEY)
+                .addHeader("Api-Key", SERVER_API_KEY)
                 .build()
             chain.proceed(newRequest)
         }

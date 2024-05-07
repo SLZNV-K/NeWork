@@ -6,14 +6,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.github.slznvk.domain.dto.Post
 import com.github.slznvk.domain.repository.PostRepository
+import com.github.slznvk.nework.auth.AppAuth
 import com.github.slznvk.nework.model.PhotoModel
 import com.github.slznvk.nework.model.StateModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,14 +31,22 @@ private val empty = Post(
 )
 private val noPhoto = PhotoModel()
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PostViewModel @Inject constructor(
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
+    appAuth: AppAuth,
 ) : ViewModel() {
 
     private val cached = postRepository.data.cachedIn(viewModelScope)
 
-    val data: Flow<PagingData<Post>> = cached.flowOn(Dispatchers.Default)
+    val data: Flow<PagingData<Post>> = appAuth.authState.flatMapLatest { (myId, _) ->
+        cached.map { pagingData ->
+            pagingData.map { post ->
+                post.copy(ownedByMe = post.authorId == myId)
+            }
+        }
+    }
 
     private val _dataState = MutableLiveData<StateModel>()
     val dataState: LiveData<StateModel>
@@ -55,14 +66,12 @@ class PostViewModel @Inject constructor(
         get() = _photo
 
     fun likeById(post: Post) = viewModelScope.launch {
-        _dataState.value = StateModel(loading = true)
         try {
             if (!post.likedByMe) {
                 postRepository.likeById(post.id)
             } else {
                 postRepository.dislikeById(post.id)
             }
-            _dataState.value = StateModel()
         } catch (e: Exception) {
             _dataState.value = StateModel(error = true)
         }

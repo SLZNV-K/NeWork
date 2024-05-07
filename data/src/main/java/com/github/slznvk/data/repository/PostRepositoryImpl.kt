@@ -89,7 +89,6 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun save(post: Post) {
-//        dao.insert(fromDto(post))
         try {
             val response = apiService.savePost(post)
 

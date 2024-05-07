@@ -82,6 +82,7 @@ dependencies {
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.imagepicker)
+    implementation(libs.androidx.swiperefreshlayout)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.glide)
     implementation(libs.adapterdelegates4.kotlin.dsl)

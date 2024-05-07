@@ -1,11 +1,8 @@
 package com.github.slznvk.nework.auth
 
 import android.content.Context
-import com.github.slznvk.data.api.ApiService
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
+import com.github.slznvk.domain.dto.AuthState
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -23,10 +20,10 @@ class AppAuth @Inject constructor(
         get() = _authState
 
     init {
-        val id = prefs.getLong(KEY_ID, 0)
+        val id = prefs.getInt(KEY_ID, 0)
         val token = prefs.getString(KEY_TOKEN, null)
 
-        if (id == 0L || token == null) {
+        if (token == null) {
             _authState = MutableStateFlow(AuthState())
             with(prefs.edit()) {
                 clear()
@@ -35,18 +32,16 @@ class AppAuth @Inject constructor(
         } else {
             _authState = MutableStateFlow(AuthState(id, token))
         }
-//        sendPushToken()
     }
 
     @Synchronized
-    fun setAuth(id: Long, token: String) {
+    fun setAuth(id: Int, token: String) {
         _authState.value = AuthState(id, token)
         with(prefs.edit()) {
-            putLong(KEY_ID, id)
+            putInt(KEY_ID, id)
             putString(KEY_TOKEN, token)
             commit()
         }
-//        sendPushToken()
     }
 
     @Synchronized
@@ -56,27 +51,7 @@ class AppAuth @Inject constructor(
             clear()
             commit()
         }
-//        sendPushToken()
     }
-
-    @InstallIn(SingletonComponent::class)
-    @EntryPoint
-    interface AppAuthEntryPoint {
-        fun getApiService(): ApiService
-    }
-
-//    fun sendPushToken(token: String? = null) {
-//        CoroutineScope(Dispatchers.Default).launch {
-//            try {
-//                val tokenDto = PushToken(token ?: FirebaseMessaging.getInstance().token.await())
-//                val entryPoint =
-//                    EntryPointAccessors.fromApplication(context, AppAuthEntryPoint::class.java)
-//                entryPoint.getApiService().sendPushToken(tokenDto)
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
 
     companion object {
         private const val KEY_ID = "id"
@@ -85,4 +60,3 @@ class AppAuth @Inject constructor(
 
 }
 
-data class AuthState(val id: Long = 0L, val token: String? = null)

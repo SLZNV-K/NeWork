@@ -25,13 +25,14 @@ data class PostEntity(
     val content: String,
     @Embedded
     val coords: Coords? = null,
-    val likeOwnerIds: List<Int>,
+    val likeOwnerIds: Int,
     val likedByMe: Boolean,
     val link: String?,
     val mentionIds: List<Int>,
     val mentionedMe: Boolean,
     val published: String,
-    val users: Users? = null
+    val users: Users? = null,
+    val ownedByMe: Boolean
 ) {
 
     fun toDto() = Post(
@@ -43,13 +44,14 @@ data class PostEntity(
         authorJob = authorJob,
         content = content,
         coords = coords,
-        likeOwnerIds = likeOwnerIds,
+        likeOwnerIds = listOf(likeOwnerIds),
         likedByMe = likedByMe,
         link = link,
         mentionIds = mentionIds,
         mentionedMe = mentionedMe,
         published = published,
-        users = null
+        users = null,
+        ownedByMe = ownedByMe
     )
 
     companion object {
@@ -63,13 +65,14 @@ data class PostEntity(
                 authorJob = dto.authorJob,
                 content = dto.content,
                 coords = dto.coords,
-                likeOwnerIds = dto.likeOwnerIds,
+                likeOwnerIds = dto.likeOwnerIds.firstOrNull() ?: 0,
                 likedByMe = dto.likedByMe,
                 link = dto.link,
                 mentionIds = dto.mentionIds,
                 mentionedMe = dto.mentionedMe,
                 published = dto.published,
-                users = dto.users
+                users = dto.users,
+                ownedByMe = dto.ownedByMe
             )
     }
 }
@@ -86,7 +89,7 @@ class Converter {
 
     @TypeConverter
     fun toListInt(data: String): List<Int> {
-        return listOf(*data.split(",").map { it.toInt() }.toTypedArray())
+        return data.split(",").mapNotNull { it.toIntOrNull() }
     }
 
     @TypeConverter

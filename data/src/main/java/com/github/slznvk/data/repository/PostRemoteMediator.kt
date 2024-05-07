@@ -48,7 +48,8 @@ class PostRemoteMediator(
             if (!response.isSuccessful) {
                 throw Exception()
             }
-            val body = response.body() ?: throw Exception()
+            val body = response.body().orEmpty()
+                .ifEmpty { return MediatorResult.Success(endOfPaginationReached = false) }
 
             appDb.withTransaction {
                 when (loadType) {

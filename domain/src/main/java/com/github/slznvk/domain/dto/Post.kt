@@ -15,5 +15,6 @@ data class Post(
     val mentionIds: List<Int>,
     val mentionedMe: Boolean = false,
     val published: String,
-    val users: Users? = null
+    val users: Users? = null,
+    val ownedByMe: Boolean = false
 ) : ListItem

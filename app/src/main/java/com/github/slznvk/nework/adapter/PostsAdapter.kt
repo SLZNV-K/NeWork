@@ -43,6 +43,7 @@ class PostsViewHolder(
             avatar.load(post.authorAvatar, true)
             author.text = post.author
             published.text = formatDateTime(post.published)
+            content.text = post.content
 
             if (post.attachment != null) {
                 attachment.load(post.attachment!!.url)
@@ -51,8 +52,12 @@ class PostsViewHolder(
                 attachment.visibility = View.GONE
             }
 
-            content.text = post.content
-            likeButton.text = post.likeOwnerIds.size.toString()
+            likeButton.text = post.likeOwnerIds.first().toString()
+            likeButton.isChecked = post.likedByMe
+
+            likeButton.setOnClickListener {
+                onInteractionListener.onLike(post)
+            }
 
             root.setOnClickListener {
                 onInteractionListener.onItem(post)
