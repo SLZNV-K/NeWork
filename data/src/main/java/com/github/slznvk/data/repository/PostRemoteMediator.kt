@@ -5,7 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.github.slznvk.data.api.ApiService
+import com.github.slznvk.data.api.PostApiService
 import com.github.slznvk.data.dao.PostDao
 import com.github.slznvk.data.dao.PostRemoteKeyDao
 import com.github.slznvk.data.db.AppDb
@@ -15,7 +15,7 @@ import com.github.slznvk.data.entity.toEntity
 
 @OptIn(ExperimentalPagingApi::class)
 class PostRemoteMediator(
-    private val apiService: ApiService,
+    private val postApiService: PostApiService,
     private val postDao: PostDao,
     private val postRemoteKeyDao: PostRemoteKeyDao,
     private val appDb: AppDb,
@@ -29,8 +29,8 @@ class PostRemoteMediator(
                 LoadType.REFRESH -> {
                     val id = postRemoteKeyDao.max()
                     if (id == null) {
-                        apiService.getLatest(state.config.initialLoadSize)
-                    } else apiService.getAfter(id, state.config.initialLoadSize)
+                        postApiService.getLatestPosts(state.config.initialLoadSize)
+                    } else postApiService.getAfterPosts(id, state.config.initialLoadSize)
                 }
 
                 LoadType.PREPEND -> {
@@ -41,7 +41,7 @@ class PostRemoteMediator(
                     val id = postRemoteKeyDao.min() ?: return MediatorResult.Success(
                         endOfPaginationReached = false
                     )
-                    apiService.getBefore(id, state.config.pageSize)
+                    postApiService.getBeforePosts(id, state.config.pageSize)
                 }
             }
 
@@ -75,15 +75,6 @@ class PostRemoteMediator(
                         )
                     }
 
-                    LoadType.PREPEND -> {
-                        postRemoteKeyDao.insert(
-                            PostRemoteKeyEntity(
-                                type = PostRemoteKeyEntity.KeyType.AFTER,
-                                key = body.first().id,
-                            )
-                        )
-                    }
-
                     LoadType.APPEND -> {
                         postRemoteKeyDao.insert(
                             PostRemoteKeyEntity(
@@ -92,6 +83,8 @@ class PostRemoteMediator(
                             )
                         )
                     }
+
+                    else -> {}
                 }
 
                 postDao.insert(body.toEntity())

@@ -3,8 +3,9 @@ package com.github.slznvk.data.repository
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.filter
 import androidx.paging.map
-import com.github.slznvk.data.api.ApiService
+import com.github.slznvk.data.api.PostApiService
 import com.github.slznvk.data.dao.PostDao
 import com.github.slznvk.data.dao.PostRemoteKeyDao
 import com.github.slznvk.data.db.AppDb
@@ -17,7 +18,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 class PostRepositoryImpl @Inject constructor(
-    private val apiService: ApiService,
+    private val postApiService: PostApiService,
     private val dao: PostDao,
     postRemoteKeyDao: PostRemoteKeyDao,
     appDb: AppDb
@@ -28,7 +29,7 @@ class PostRepositoryImpl @Inject constructor(
         config = PagingConfig(pageSize = 25),
         pagingSourceFactory = dao::getPagingSource,
         remoteMediator = PostRemoteMediator(
-            apiService = apiService,
+            postApiService = postApiService,
             postDao = dao,
             postRemoteKeyDao = postRemoteKeyDao,
             appDb = appDb
@@ -37,22 +38,10 @@ class PostRepositoryImpl @Inject constructor(
         it.map(PostEntity::toDto)
     }
 
-    override suspend fun getAllPosts(): List<Post> {
-        return try {
-            val response = apiService.getAllPosts()
-            if (!response.isSuccessful) {
-                throw Exception()
-            }
-            response.body() ?: throw Exception()
-        } catch (e: Exception) {
-            throw Exception()
-        }
-    }
-
     override suspend fun likeById(id: Int) {
         dao.likeById(id)
         try {
-            val response = apiService.like(id)
+            val response = postApiService.likePost(id)
             if (!response.isSuccessful) {
                 throw Error()
             }
@@ -66,7 +55,7 @@ class PostRepositoryImpl @Inject constructor(
     override suspend fun dislikeById(id: Int) {
         dao.likeById(id)
         try {
-            val response = apiService.dislike(id)
+            val response = postApiService.dislikePost(id)
             if (!response.isSuccessful) {
                 throw Error()
             }
@@ -78,9 +67,9 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun removeById(id: Int) {
-        dao.removeById(id)
         try {
-            apiService.delete(id)
+            postApiService.removePostById(id)
+            dao.removeById(id)
         } catch (e: IOException) {
             throw Error()
         } catch (e: Exception) {
@@ -90,7 +79,7 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun save(post: Post) {
         try {
-            val response = apiService.savePost(post)
+            val response = postApiService.savePost(post)
 
             if (!response.isSuccessful) {
                 throw Exception()
@@ -104,4 +93,24 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPostById(id: Int) = dao.getPostById(id).toDto()
+    override suspend fun loadUserWall(authorId: Int) =
+        data.map { pagingData -> pagingData.filter { it.authorId == authorId } }
+
+
+//    override suspend fun loadUserWall(id: Int): List<Post> {
+//        return try {
+//            val response = postApiService.getUserWall(id)
+//
+//            if (!response.isSuccessful) {
+//                throw Exception()
+//            }
+//            response.body() ?: throw Exception()
+//        } catch (e: Exception) {
+//            throw e
+//        }
+//    }
+
+//    override suspend fun loadWall(authorId: Int) {
+//        wall = data.map { pagingData -> pagingData.filter { it.authorId == authorId } }
+//    }
 }

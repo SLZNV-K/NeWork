@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import com.github.slznvk.domain.dto.Post
 import com.github.slznvk.domain.repository.PostRepository
@@ -13,9 +14,12 @@ import com.github.slznvk.nework.auth.AppAuth
 import com.github.slznvk.nework.model.PhotoModel
 import com.github.slznvk.nework.model.StateModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,6 +52,14 @@ class PostViewModel @Inject constructor(
         }
     }
 
+
+    private lateinit var _userWall: MutableStateFlow<PagingData<Post>>
+
+    //    val userWall: Flow<PagingData<Post>>
+//        get() = _userWall
+    var userWall: Flow<PagingData<Post>>? = null
+
+
     private val _dataState = MutableLiveData<StateModel>()
     val dataState: LiveData<StateModel>
         get() = _dataState
@@ -64,6 +76,15 @@ class PostViewModel @Inject constructor(
     private val _photo = MutableLiveData<PhotoModel?>(null)
     val photo: LiveData<PhotoModel?>
         get() = _photo
+
+    fun loadUserWall(id: Int) = viewModelScope.launch {
+        try {
+            userWall = data.map { pagingData -> pagingData.filter { it.authorId == id } }
+                .flowOn(Dispatchers.Default)
+        } catch (e: Exception) {
+            throw e
+        }
+    }
 
     fun likeById(post: Post) = viewModelScope.launch {
         try {
@@ -86,6 +107,18 @@ class PostViewModel @Inject constructor(
                 _dataState.value = StateModel(error = true)
             }
 
+        }
+    }
+
+    fun removePostById(id: Int) {
+        viewModelScope.launch {
+            _dataState.value = StateModel(loading = true)
+            try {
+                postRepository.removeById(id)
+                _dataState.value = StateModel()
+            } catch (e: Exception) {
+                _dataState.value = StateModel(error = true)
+            }
         }
     }
 

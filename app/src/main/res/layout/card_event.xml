@@ -25,10 +25,10 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="@dimen/common_spacing"
                 android:layout_marginTop="@dimen/common_spacing"
+                android:contentDescription="@string/description_user_s_avatar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/avatars"
-                android:contentDescription="@string/description_user_s_avatar" />
+                tools:src="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/author"
@@ -64,18 +64,48 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/attachment"
+            <ViewStub
+                android:id="@+id/stubView"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
+                android:inflatedId="@+id/inflatedView"
+                android:layout="@layout/stub_audio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/avatar" />
+
+            <VideoView
+                android:id="@+id/videoAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
                 android:layout_marginTop="@dimen/common_spacing"
+                android:contentDescription="@string/description_materials_attached_to_the_post"
                 android:scaleType="centerCrop"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/menu"
-                tools:src="@tools:sample/avatars"
-                android:contentDescription="@string/description_materials_attached_to_the_post" />
+                app:layout_constraintTop_toBottomOf="@id/avatar"
+                tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/imageAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="@dimen/common_spacing"
+                android:contentDescription="@string/description_materials_attached_to_the_post"
+                android:scaleType="centerCrop"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/avatar"
+                tools:src="@tools:sample/avatars" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrierHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="author,menu, published, avatar, videoAttachment, imageAttachment, stubView" />
 
             <TextView
                 android:id="@+id/type"
@@ -83,8 +113,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/common_spacing"
                 android:layout_marginTop="@dimen/common_spacing"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/attachment"
+                app:layout_constraintTop_toBottomOf="@id/imageAttachment"
                 tools:text="Online" />
 
             <TextView
@@ -101,11 +132,11 @@
                 style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/description_event_broadcast_start_button"
                 android:src="@drawable/play_icon"
                 app:layout_constraintBottom_toBottomOf="@id/datetime"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/type"
-                android:contentDescription="@string/description_event_broadcast_start_button" />
+                app:layout_constraintTop_toTopOf="@id/type" />
 
             <TextView
                 android:id="@+id/content"

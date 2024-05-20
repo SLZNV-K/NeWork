@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.slznvk.nework.R
 import com.github.slznvk.nework.adapter.AdapterDelegates.usersDelegate
 import com.github.slznvk.nework.databinding.FragmentUsersBinding
 import com.github.slznvk.nework.viewModel.UserViewModel
@@ -18,9 +20,18 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class UsersFragment : Fragment() {
     private lateinit var binding: FragmentUsersBinding
+
     private val viewModel: UserViewModel by viewModels()
+
     private val adapter = ListDelegationAdapter(
-        usersDelegate()
+        usersDelegate {
+            findNavController().navigate(
+                R.id.action_usersFragment_to_userDetailsFragment,
+                Bundle().apply {
+                    putInt(USER_ID, it.id)
+                    putString(USER_NAME, "${it.name} / ${it.login}")
+                })
+        }
     )
 
     override fun onCreateView(
@@ -34,7 +45,7 @@ class UsersFragment : Fragment() {
         binding.apply {
             recyclerUsers.adapter = adapter
 
-            viewModel.dataState.observe(viewLifecycleOwner){
+            viewModel.dataState.observe(viewLifecycleOwner) {
                 errorText.isVisible = it.error
                 retryButton.isVisible = it.error
             }
@@ -47,5 +58,10 @@ class UsersFragment : Fragment() {
 
             return root
         }
+    }
+
+    companion object {
+        const val USER_ID = "USER_ID"
+        const val USER_NAME = "USER_NAME"
     }
 }

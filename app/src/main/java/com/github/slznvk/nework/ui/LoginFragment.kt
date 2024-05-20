@@ -42,8 +42,8 @@ class LoginFragment : Fragment() {
                     ).show()
                 } else {
                     authViewModel.authentication(
-                        login.toString(),
-                        password.toString()
+                        log.toString(),
+                        pass.toString()
                     )
                 }
             }

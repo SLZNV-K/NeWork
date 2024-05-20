@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@id/newContent">
 
         <ImageView
-            android:id="@+id/attachment"
+            android:id="@+id/imageAttachment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
@@ -80,6 +80,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/background"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
@@ -113,7 +114,7 @@
             tools:ignore="RedundantDescriptionCheck" />
 
         <Button
-            android:id="@+id/locationButton"
+            android:id="@+id/chooseLocationButton"
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -50,7 +50,7 @@ data class PostEntity(
         mentionIds = mentionIds,
         mentionedMe = mentionedMe,
         published = published,
-        users = null,
+        users = users,
         ownedByMe = ownedByMe
     )
 
@@ -101,4 +101,5 @@ class Converter {
     fun toListUsers(json: String): Users {
         return Gson().fromJson(json, Users::class.java)
     }
+
 }

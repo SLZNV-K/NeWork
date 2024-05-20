@@ -28,7 +28,7 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="sign_in">Sign In</string>
-    <string name="to_interact_with_posts_you_need_to_log_in">To interact with posts, you need to log in</string>
+    <string name="to_interact_with_publications_you_need_to_log_in">To interact with publications, you need to log in</string>
     <string name="cancel">Cancel</string>
     <string name="looking_for_a_job">Looking for a job</string>
     <string name="registration">Registration</string>
@@ -39,4 +39,23 @@
     <string name="invalid_login">Invalid login</string>
     <string name="invalid_password">Invalid password</string>
     <string name="a_user_with_this_username_already_exists">A user with this username already exists</string>
+    <string name="sign_out">Sign out</string>
+    <string name="if_you_exit_now_progress_will_be_lost">If you exit now progress will be lost</string>
+    <string name="get_out_anyway">Get out anyway</string>
+    <string name="event">Event</string>
+    <string name="participants">Participants</string>
+    <string name="new_event">New event</string>
+    <string name="description_add_an_event_date">Add an event date</string>
+    <string name="type">Type</string>
+    <string name="online" translatable="false">Online</string>
+    <string name="offline" translatable="false">Offline</string>
+    <string name="date_hint">date</string>
+    <string name="description_date_picker">Date picker</string>
+    <string name="description_save_selected_point_button">Save selected point button</string>
+    <string name="wall">Wall</string>
+    <string name="jobs">Jobs</string>
+    <string name="description_the_button_for_deleting_a_place_of_work">The button for deleting a place of work</string>
+    <string name="description_play_pause_button">Play/pause button</string>
+    <string name="description_sign_out_button">Sign out button</string>
+    <string name="the_name_of_the_song">The name of the song</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.github.slznvk.nework.di
 
-import com.github.slznvk.data.api.ApiService
+import com.github.slznvk.data.api.PostApiService
+import com.github.slznvk.data.api.EventApiService
+import com.github.slznvk.data.api.UserApiService
 import com.github.slznvk.nework.BuildConfig.SERVER_API_KEY
 import com.github.slznvk.nework.auth.AppAuth
 import com.yandex.maps.mobile.BuildConfig
@@ -66,5 +68,15 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+    fun provideApiService(retrofit: Retrofit): PostApiService = retrofit.create(PostApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideEventApiService(retrofit: Retrofit): EventApiService =
+        retrofit.create(EventApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserApiService(retrofit: Retrofit): UserApiService =
+        retrofit.create(UserApiService::class.java)
 }

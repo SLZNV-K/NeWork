@@ -45,7 +45,7 @@ class PostsFeedFragment : Fragment() {
                 } else {
                     AlertDialog.Builder(requireActivity()).apply {
                         setTitle(getString(R.string.sign_in))
-                        setMessage(getString(R.string.to_interact_with_posts_you_need_to_log_in))
+                        setMessage(getString(R.string.to_interact_with_publications_you_need_to_log_in))
                         setPositiveButton(getString(R.string.sign_in)) { _, _ ->
                             findNavController().navigate(R.id.loginFragment)
                         }
@@ -56,7 +56,7 @@ class PostsFeedFragment : Fragment() {
             }
 
             override fun onRemove(item: ListItem) {
-                TODO("Not yet implemented")
+                viewModel.removePostById(item.id)
             }
 
             override fun onEdit(item: ListItem) {
@@ -64,8 +64,8 @@ class PostsFeedFragment : Fragment() {
                     .navigate(
                         R.id.action_postsFeedFragment_to_newPostFragment,
                         Bundle().apply {
-                            putString(CONTENT, (item as Post).content)
-                            putInt(ID, item.id)
+                            putString(POST_CONTENT, (item as Post).content)
+                            putInt(POST_ID, item.id)
                         }
                     )
                 viewModel.edit(item as Post)
@@ -75,7 +75,7 @@ class PostsFeedFragment : Fragment() {
                 findNavController().navigate(
                     R.id.action_postsFeedFragment_to_postDetailsFragment,
                     Bundle().apply {
-                        putInt(ID, (item as Post).id)
+                        putInt(POST_ID, item.id)
                     })
             }
         })
@@ -113,7 +113,7 @@ class PostsFeedFragment : Fragment() {
                 } else {
                     AlertDialog.Builder(requireActivity()).apply {
                         setTitle(getString(R.string.sign_in))
-                        setMessage(getString(R.string.to_interact_with_posts_you_need_to_log_in))
+                        setMessage(getString(R.string.to_interact_with_publications_you_need_to_log_in))
                         setPositiveButton(getString(R.string.sign_in)) { _, _ ->
                             findNavController().navigate(R.id.loginFragment)
                         }
@@ -122,13 +122,12 @@ class PostsFeedFragment : Fragment() {
                     }.create().show()
                 }
             }
-
             return root
         }
     }
 
     companion object {
-        const val ID = "ID"
-        const val CONTENT = "CONTENT"
+        const val POST_ID = "ID"
+        const val POST_CONTENT = "CONTENT"
     }
 }

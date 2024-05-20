@@ -16,6 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/back_arrow_icon"
         app:title="@string/post">
 
         <Button
@@ -72,8 +73,31 @@
                 app:layout_constraintTop_toBottomOf="@id/author"
                 tools:text="Android Developer" />
 
+            <ViewStub
+                android:id="@+id/stubView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inflatedId="@+id/inflatedView"
+                android:layout="@layout/stub_audio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/avatar" />
+
+            <VideoView
+                android:id="@+id/videoAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="@dimen/common_spacing"
+                android:contentDescription="@string/description_materials_attached_to_the_post"
+                android:scaleType="centerCrop"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/avatar"
+                tools:src="@tools:sample/avatars" />
+
             <ImageView
-                android:id="@+id/attachment"
+                android:id="@+id/imageAttachment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/common_spacing"
@@ -85,6 +109,13 @@
                 app:layout_constraintTop_toBottomOf="@id/avatar"
                 tools:src="@tools:sample/avatars" />
 
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrierHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="avatar,videoAttachment, imageAttachment, stubView" />
+
             <TextView
                 android:id="@+id/published"
                 android:layout_width="0dp"
@@ -92,7 +123,7 @@
                 android:layout_marginTop="@dimen/common_spacing"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@id/avatar"
-                app:layout_constraintTop_toBottomOf="@id/attachment"
+                app:layout_constraintTop_toBottomOf="@id/barrierHead"
                 tools:text="11.05.22 11:21" />
 
             <TextView
@@ -133,14 +164,23 @@
 
             <LinearLayout
                 android:id="@+id/usersList"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@id/likeButton"
                 app:layout_constraintStart_toEndOf="@id/likeButton"
                 app:layout_constraintTop_toTopOf="@id/likeButton">
 
-                <!--TODO(икоки пользователей)-->
+                <ImageView
+                    android:id="@+id/user1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/circle_button_background"
+                    android:contentDescription="@string/description_user_s_avatar"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ImageContrastCheck" />
 
             </LinearLayout>
 

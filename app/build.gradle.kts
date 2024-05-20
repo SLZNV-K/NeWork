@@ -80,6 +80,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.imagepicker)
     implementation(libs.androidx.swiperefreshlayout)

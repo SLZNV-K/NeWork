@@ -6,11 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
     val data: Flow<PagingData<Post>>
-    suspend fun getAllPosts(): List<Post>
-
     suspend fun likeById(id: Int)
     suspend fun dislikeById(id: Int)
     suspend fun removeById(id: Int)
     suspend fun save(post: Post)
     suspend fun getPostById(id: Int): Post
+    suspend fun loadUserWall(authorId: Int): Flow<PagingData<Post>>
 }

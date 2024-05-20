@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentNewPostBinding
 import com.github.slznvk.nework.model.PhotoModel
 import com.github.slznvk.nework.viewModel.PostViewModel
@@ -29,7 +30,6 @@ class NewPostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNewPostBinding.inflate(layoutInflater, container, false)
-
 
         val launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -58,7 +58,7 @@ class NewPostFragment : Fragment() {
                     return@observe
                 }
                 attachmentFrame.visibility = View.VISIBLE
-                attachment.setImageURI(it.uri)
+                imageAttachment.setImageURI(it.uri)
             }
 
             removeButton.setOnClickListener {
@@ -68,8 +68,25 @@ class NewPostFragment : Fragment() {
             takePhotoButton.setOnClickListener {
                 ImagePicker.with(this@NewPostFragment)
                     .crop()
+                    .cameraOnly()
                     .compress(2048)
                     .createIntent { launcher.launch(it) }
+            }
+
+            takeAttachmentButton.setOnClickListener {
+                ImagePicker.with(this@NewPostFragment)
+                    .crop()
+                    .galleryOnly()
+                    .compress(2048)
+                    .createIntent { launcher.launch(it) }
+            }
+
+            chooseUsersButton.setOnClickListener {
+//                TODO: переход на выбор пользователей
+            }
+
+            chooseLocationButton.setOnClickListener {
+                findNavController().navigate(R.id.action_newPostFragment_to_mapFragment)
             }
 
             saveButton.setOnClickListener {
@@ -82,8 +99,7 @@ class NewPostFragment : Fragment() {
                         requireActivity(),
                         "Text must no be blank",
                         Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    ).show()
                 }
             }
         }
@@ -92,7 +108,28 @@ class NewPostFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val mainActivity = activity as? MainActivity
+        mainActivity?.let { activity ->
+            with(activity.binding) {
+                bottomNavigationView.visibility = View.GONE
+                toolbar.visibility = View.GONE
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val mainActivity = activity as? MainActivity
+        mainActivity?.let { activity ->
+            with(activity.binding) {
+                bottomNavigationView.visibility = View.VISIBLE
+                toolbar.visibility = View.VISIBLE
+            }
+        }
     }
 }

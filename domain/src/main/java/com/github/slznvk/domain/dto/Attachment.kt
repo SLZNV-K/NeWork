@@ -1,6 +1,10 @@
 package com.github.slznvk.domain.dto
 
 data class Attachment(
-    val type: String,
+    val type: AttachmentType,
     val url: String
 )
+
+enum class AttachmentType {
+    IMAGE, VIDEO, AUDIO
+}

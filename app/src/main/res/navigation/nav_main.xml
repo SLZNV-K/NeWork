@@ -23,17 +23,32 @@
         android:id="@+id/eventsFeedFragment"
         android:name="com.github.slznvk.nework.ui.EventsFeedFragment"
         android:label="fragment_events_feed"
-        tools:layout="@layout/fragment_events_feed" />
+        tools:layout="@layout/fragment_events_feed" >
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_newEventFragment"
+            app:destination="@id/newEventFragment" />
+    </fragment>
     <fragment
         android:id="@+id/usersFragment"
         android:name="com.github.slznvk.nework.ui.UsersFragment"
         android:label="fragment_users"
-        tools:layout="@layout/fragment_users" />
+        tools:layout="@layout/fragment_users" >
+        <action
+            android:id="@+id/action_usersFragment_to_userDetailsFragment"
+            app:destination="@id/userDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/newPostFragment"
         android:name="com.github.slznvk.nework.ui.NewPostFragment"
         android:label="fragment_new_post"
-        tools:layout="@layout/fragment_new_post" />
+        tools:layout="@layout/fragment_new_post" >
+        <action
+            android:id="@+id/action_newPostFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
     <fragment
         android:id="@+id/postDetailsFragment"
         android:name="com.github.slznvk.nework.ui.PostDetailsFragment"
@@ -57,4 +72,26 @@
             android:id="@+id/action_registrationFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.github.slznvk.nework.ui.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/eventDetailsFragment"
+        android:name="com.github.slznvk.nework.ui.EventDetailsFragment"
+        android:label="fragment_event_details"
+        tools:layout="@layout/fragment_event_details" />
+    <fragment
+        android:id="@+id/newEventFragment"
+        android:name="com.github.slznvk.nework.ui.NewEventFragment"
+        android:label="NewEventFragment" >
+        <action
+            android:id="@+id/action_newEventFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailsFragment"
+        android:name="com.github.slznvk.nework.ui.UserDetailsFragment"
+        android:label="UserDetailsFragment" />
 </navigation>

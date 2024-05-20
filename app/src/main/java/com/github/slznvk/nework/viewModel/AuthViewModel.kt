@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.slznvk.data.api.ApiService
+import com.github.slznvk.data.api.UserApiService
 import com.github.slznvk.nework.auth.AppAuth
 import com.github.slznvk.nework.error.ApiError
 import com.github.slznvk.nework.model.AuthModelState
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
 
     private val appAuth: AppAuth,
-    private val apiService: ApiService
+    private val apiService: UserApiService
 ) : ViewModel() {
 
     val data = appAuth.authState
@@ -35,7 +35,10 @@ class AuthViewModel @Inject constructor(
     fun authentication(login: String, pass: String) {
         viewModelScope.launch {
             try {
-                val response = apiService.authentication(login, pass)
+                val response = apiService.authentication(
+                    login,
+                    pass
+                )
 
                 if (!response.isSuccessful) {
                     throw ApiError(response.code(), response.message())

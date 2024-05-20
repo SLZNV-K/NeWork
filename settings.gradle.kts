@@ -24,4 +24,3 @@ rootProject.name = "NeWork"
 include(":app")
 include(":data")
 include(":domain")
-include(":domain1")
