@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.MediaController
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.slznvk.domain.dto.AttachmentType
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentPostDetailsBinding
+import com.github.slznvk.nework.observer.MediaLifecycleObserver
 import com.github.slznvk.nework.ui.PostsFeedFragment.Companion.POST_ID
 import com.github.slznvk.nework.utills.formatDateTime
 import com.github.slznvk.nework.utills.load
@@ -52,6 +54,10 @@ class PostDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPostDetailsBinding.inflate(layoutInflater, container, false)
+
+        val mediaObserver = MediaLifecycleObserver()
+        lifecycle.addObserver(mediaObserver)
+
         map = binding.mapView.mapWindow.map
 
         val id = arguments?.getInt(POST_ID)
@@ -72,6 +78,7 @@ class PostDetailsFragment : Fragment() {
                     published.text = post.published.formatDateTime()
                     avatar.load(post.authorAvatar, true)
                     content.text = post.content
+                    content.isVisible = post.content != ""
                     likeButton.isChecked = post.likedByMe
                     likeButton.text = post.likeOwnerIds.first().toString()
                     usersButton.text = post.mentionIds.size.toString()
@@ -82,34 +89,44 @@ class PostDetailsFragment : Fragment() {
 
                     imageAttachment.visibility = View.GONE
                     videoAttachment.visibility = View.GONE
-                    stubView.visibility = View.GONE
+                    audioAttachment.visibility = View.GONE
 
                     if (post.attachment != null) {
                         when (post.attachment?.type) {
-                            AttachmentType.IMAGE -> {
-                                imageAttachment.visibility = View.VISIBLE
-                                imageAttachment.load(post.attachment!!.url)
+                            AttachmentType.IMAGE -> imageAttachment.apply {
+                                visibility = View.VISIBLE
+                                load(post.attachment?.url)
                             }
 
-                            AttachmentType.VIDEO -> {
-                                videoAttachment.visibility = View.VISIBLE
-                                videoAttachment.apply {
-                                    setMediaController(MediaController(context))
-                                    setVideoURI(Uri.parse(post.attachment?.url))
-                                    setOnPreparedListener {
-                                        start()
-                                    }
-                                    setOnCompletionListener {
-                                        stopPlayback()
-                                    }
+                            AttachmentType.VIDEO -> videoAttachment.apply {
+                                visibility = View.VISIBLE
+                                setMediaController(MediaController(context))
+                                setVideoURI(Uri.parse(post.attachment?.url))
+                                setOnPreparedListener {
+                                    start()
+                                }
+                                setOnCompletionListener {
+                                    stopPlayback()
                                 }
                             }
 
                             AttachmentType.AUDIO -> {
-                                stubView.inflate()
+                                audioAttachment.visibility = View.VISIBLE
+
+                                playPauseButton.setOnClickListener {
+                                    mediaObserver.playSong(post.attachment!!.url, post.songPlaying)
+                                    post.songPlaying = !post.songPlaying
+                                    playPauseButton.setImageResource(
+                                        if (post.songPlaying) {
+                                            R.drawable.pause_icon
+                                        } else {
+                                            R.drawable.play_icon
+                                        }
+                                    )
+                                }
                             }
 
-                            null -> error("Unknown attachment type: ${post.attachment?.type}")
+                            else -> error("Unknown attachment type: ${post.attachment?.type}")
                         }
                     }
 

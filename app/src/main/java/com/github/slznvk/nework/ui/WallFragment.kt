@@ -16,6 +16,7 @@ import com.github.slznvk.nework.R
 import com.github.slznvk.nework.adapter.OnInteractionListener
 import com.github.slznvk.nework.adapter.PostsAdapter
 import com.github.slznvk.nework.databinding.FragmentWallBinding
+import com.github.slznvk.nework.observer.MediaLifecycleObserver
 import com.github.slznvk.nework.ui.UsersFragment.Companion.USER_ID
 import com.github.slznvk.nework.viewModel.AuthViewModel
 import com.github.slznvk.nework.viewModel.PostViewModel
@@ -46,6 +47,10 @@ class WallFragment : Fragment() {
                 }
             }
         }
+
+        val mediaObserver = MediaLifecycleObserver()
+        lifecycle.addObserver(mediaObserver)
+
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onLike(item: ListItem) {
                 if (authViewModel.authenticated) {
@@ -86,7 +91,8 @@ class WallFragment : Fragment() {
                         putInt(PostsFeedFragment.POST_ID, item.id)
                     })
             }
-        })
+        }, observer = mediaObserver)
+
         binding.apply {
             recyclerWall.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

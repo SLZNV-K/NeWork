@@ -34,8 +34,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/common_spacing"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/published"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@id/published"
                 app:layout_constraintStart_toEndOf="@id/avatar"
                 app:layout_constraintTop_toTopOf="@id/avatar"
                 app:layout_constraintVertical_chainStyle="packed"
@@ -63,15 +63,36 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="SpeakableTextPresentCheck" />
 
-            <ViewStub
-                android:id="@+id/stubView"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/audioAttachment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inflatedId="@+id/inflatedView"
-                android:layout="@layout/stub_audio"
+                android:layout_marginTop="@dimen/common_spacing"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/avatar" />
+                app:layout_constraintTop_toBottomOf="@id/avatar">
+
+                <ImageButton
+                    android:id="@+id/playPauseButton"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/description_play_pause_button"
+                    android:src="@drawable/play_icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/songName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/the_name_of_the_song"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/playPauseButton"
+                    app:layout_constraintStart_toEndOf="@id/playPauseButton"
+                    app:layout_constraintTop_toTopOf="@id/playPauseButton" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <VideoView
                 android:id="@+id/videoAttachment"
@@ -80,7 +101,7 @@
                 android:layout_marginTop="@dimen/common_spacing"
                 android:contentDescription="@string/description_materials_attached_to_the_post"
                 android:scaleType="centerCrop"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/avatar"
@@ -93,7 +114,7 @@
                 android:layout_marginTop="@dimen/common_spacing"
                 android:contentDescription="@string/description_materials_attached_to_the_post"
                 android:scaleType="centerCrop"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/avatar"
@@ -104,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="author,menu, published, avatar, videoAttachment, imageAttachment, stubView" />
+                app:constraint_referenced_ids="author,menu, published, avatar, videoAttachment, imageAttachment, audioAttachment" />
 
             <TextView
                 android:id="@+id/content"

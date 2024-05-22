@@ -20,4 +20,5 @@ data class Event(
     val type: String = "",
     val users: Users? = null,
     val ownedByMe: Boolean = false,
+    var songPlaying: Boolean = false
 ) : ListItem

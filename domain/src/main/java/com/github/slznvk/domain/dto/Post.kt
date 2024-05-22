@@ -16,5 +16,6 @@ data class Post(
     val mentionedMe: Boolean = false,
     val published: String,
     val users: Users? = null,
-    val ownedByMe: Boolean = false
+    val ownedByMe: Boolean = false,
+    var songPlaying: Boolean = false
 ) : ListItem

@@ -21,6 +21,7 @@ import com.github.slznvk.nework.R
 import com.github.slznvk.nework.adapter.EventsAdapter
 import com.github.slznvk.nework.adapter.OnInteractionListener
 import com.github.slznvk.nework.databinding.FragmentEventsFeedBinding
+import com.github.slznvk.nework.observer.MediaLifecycleObserver
 import com.github.slznvk.nework.viewModel.AuthViewModel
 import com.github.slznvk.nework.viewModel.EventViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +39,10 @@ class EventsFeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEventsFeedBinding.inflate(layoutInflater, container, false)
+
+        val mediaObserver = MediaLifecycleObserver()
+        lifecycle.addObserver(mediaObserver)
+
         val adapter = EventsAdapter(object : OnInteractionListener {
             override fun onLike(item: ListItem) {
                 if (authViewModel.authenticated) {
@@ -78,7 +83,7 @@ class EventsFeedFragment : Fragment() {
                     })
             }
 
-        })
+        }, observer = mediaObserver)
 
         binding.apply {
 

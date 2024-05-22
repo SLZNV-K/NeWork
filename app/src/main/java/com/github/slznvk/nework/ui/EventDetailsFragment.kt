@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.MediaController
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.slznvk.domain.dto.AttachmentType
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentEventDetailsBinding
+import com.github.slznvk.nework.observer.MediaLifecycleObserver
 import com.github.slznvk.nework.ui.EventsFeedFragment.Companion.EVENT_ID
 import com.github.slznvk.nework.utills.formatDateTime
 import com.github.slznvk.nework.utills.load
@@ -48,6 +50,10 @@ class EventDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEventDetailsBinding.inflate(layoutInflater, container, false)
+
+        val mediaObserver = MediaLifecycleObserver()
+        lifecycle.addObserver(mediaObserver)
+
         viewModel = ViewModelProvider(requireActivity())[EventViewModel::class.java]
         map = binding.mapView.mapWindow.map
 
@@ -69,42 +75,58 @@ class EventDetailsFragment : Fragment() {
                     published.text = event.published.formatDateTime()
                     avatar.load(event.authorAvatar, true)
                     content.text = event.content
+                    content.isVisible = event.content != ""
                     likeButton.isChecked = event.likedByMe
                     likeButton.text = event.likeOwnerIds.size.toString()
                     usersButton.text = event.participantsIds.size.toString()
                     eventType.text = event.type
 
+                    imageAttachment.visibility = View.GONE
+                    videoAttachment.visibility = View.GONE
+                    audioAttachment.visibility = View.GONE
+
                     if (event.attachment != null) {
                         when (event.attachment?.type) {
-                            AttachmentType.IMAGE -> {
-                                imageAttachment.visibility = View.VISIBLE
-                                videoAttachment.visibility = View.GONE
-                                imageAttachment.load(event.attachment!!.url)
+                            AttachmentType.IMAGE -> imageAttachment.apply {
+                                visibility = View.VISIBLE
+                                load(event.attachment?.url)
                             }
 
-                            AttachmentType.VIDEO -> {
-                                videoAttachment.visibility = View.VISIBLE
-                                imageAttachment.visibility = View.GONE
-                                videoAttachment.apply {
-                                    setMediaController(MediaController(context))
-                                    setVideoURI(Uri.parse(event.attachment?.url))
-                                    setOnPreparedListener {
-                                        start()
-                                    }
-                                    setOnCompletionListener {
-                                        stopPlayback()
-                                    }
+                            AttachmentType.VIDEO -> videoAttachment.apply {
+                                visibility = View.VISIBLE
+                                setMediaController(MediaController(context))
+                                setVideoURI(Uri.parse(event.attachment?.url))
+                                setOnPreparedListener {
+                                    start()
+                                }
+                                setOnCompletionListener {
+                                    stopPlayback()
                                 }
                             }
 
                             AttachmentType.AUDIO -> {
-                                videoAttachment.visibility = View.GONE
-                                imageAttachment.visibility = View.GONE
+                                audioAttachment.visibility = View.VISIBLE
+
+                                playPauseButton.setOnClickListener {
+                                    mediaObserver.playSong(
+                                        event.attachment!!.url,
+                                        event.songPlaying
+                                    )
+                                    event.songPlaying = !event.songPlaying
+                                    playPauseButton.setImageResource(
+                                        if (event.songPlaying) {
+                                            R.drawable.pause_icon
+                                        } else {
+                                            R.drawable.play_icon
+                                        }
+                                    )
+                                }
                             }
 
-                            null -> error("Unknown attachment type: ${event.attachment?.type}")
+                            else -> error("Unknown attachment type: ${event.attachment?.type}")
                         }
                     }
+
                     likeButton.setOnClickListener {
                         if (authViewModel.authenticated) {
                             viewModel.likeEventById(event)

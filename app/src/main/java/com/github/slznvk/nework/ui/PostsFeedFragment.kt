@@ -20,6 +20,7 @@ import com.github.slznvk.nework.R
 import com.github.slznvk.nework.adapter.OnInteractionListener
 import com.github.slznvk.nework.adapter.PostsAdapter
 import com.github.slznvk.nework.databinding.FragmentPostsFeedBinding
+import com.github.slznvk.nework.observer.MediaLifecycleObserver
 import com.github.slznvk.nework.viewModel.AuthViewModel
 import com.github.slznvk.nework.viewModel.PostViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +38,9 @@ class PostsFeedFragment : Fragment() {
         binding = FragmentPostsFeedBinding.inflate(layoutInflater, container, false)
         val viewModel: PostViewModel by activityViewModels()
         val authViewModel: AuthViewModel by activityViewModels()
+
+        val mediaObserver = MediaLifecycleObserver()
+        lifecycle.addObserver(mediaObserver)
 
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onLike(item: ListItem) {
@@ -78,7 +82,7 @@ class PostsFeedFragment : Fragment() {
                         putInt(POST_ID, item.id)
                     })
             }
-        })
+        }, observer = mediaObserver)
 
         binding.apply {
             recyclerPosts.adapter = adapter

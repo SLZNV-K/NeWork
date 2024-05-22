@@ -14,15 +14,17 @@ import com.github.slznvk.domain.dto.AttachmentType
 import com.github.slznvk.domain.dto.Event
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.CardEventBinding
+import com.github.slznvk.nework.observer.MediaLifecycleObserver
 import com.github.slznvk.nework.utills.formatDateTime
 import com.github.slznvk.nework.utills.load
 
 class EventsAdapter(
-    private val onInteractionListener: OnInteractionListener
+    private val onInteractionListener: OnInteractionListener,
+    private val observer: MediaLifecycleObserver
 ) : PagingDataAdapter<Event, EventsViewHolder>(EventDiffCallBack) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsViewHolder {
         val view = CardEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return EventsViewHolder(view, onInteractionListener)
+        return EventsViewHolder(view, onInteractionListener, observer)
     }
 
     override fun onBindViewHolder(holder: EventsViewHolder, position: Int) {
@@ -33,7 +35,8 @@ class EventsAdapter(
 
 class EventsViewHolder(
     private val binding: CardEventBinding,
-    private val onInteractionListener: OnInteractionListener
+    private val onInteractionListener: OnInteractionListener,
+    private val observer: MediaLifecycleObserver
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(event: Event) {
         binding.apply {
@@ -41,37 +44,45 @@ class EventsViewHolder(
             author.text = event.author
             published.text = event.published.formatDateTime()
             content.text = event.content
+            content.isVisible = event.content != ""
+
+            imageAttachment.visibility = View.GONE
+            videoAttachment.visibility = View.GONE
+            audioAttachment.visibility = View.GONE
 
             if (event.attachment != null) {
                 when (event.attachment?.type) {
-                    AttachmentType.IMAGE -> {
-                        imageAttachment.visibility = View.VISIBLE
-                        videoAttachment.visibility = View.GONE
-                        stubView.visibility = View.GONE
-                        imageAttachment.load(event.attachment?.url)
+                    AttachmentType.IMAGE -> imageAttachment.apply {
+                        visibility = View.VISIBLE
+                        load(event.attachment?.url)
                     }
 
-                    AttachmentType.VIDEO -> {
-                        videoAttachment.visibility = View.VISIBLE
-                        imageAttachment.visibility = View.GONE
-                        stubView.visibility = View.GONE
-                        videoAttachment.apply {
-                            setMediaController(MediaController(context))
-                            setVideoURI(Uri.parse(event.attachment?.url))
-                            setOnPreparedListener {
-                                start()
-                            }
-                            setOnCompletionListener {
-                                stopPlayback()
-                            }
+                    AttachmentType.VIDEO -> videoAttachment.apply {
+                        visibility = View.VISIBLE
+                        setMediaController(MediaController(context))
+                        setVideoURI(Uri.parse(event.attachment?.url))
+                        setOnPreparedListener {
+                            start()
+                        }
+                        setOnCompletionListener {
+                            stopPlayback()
                         }
                     }
 
                     AttachmentType.AUDIO -> {
-                        videoAttachment.visibility = View.GONE
-                        imageAttachment.visibility = View.GONE
-                        stubView.visibility = View.VISIBLE
-                        stubView.inflate()
+                        audioAttachment.visibility = View.VISIBLE
+
+                        playPauseButton.setOnClickListener {
+                            observer.playSong(event.attachment!!.url, event.songPlaying)
+                            event.songPlaying = !event.songPlaying
+                            playPauseButton.setImageResource(
+                                if (event.songPlaying) {
+                                    R.drawable.pause_icon
+                                } else {
+                                    R.drawable.play_icon
+                                }
+                            )
+                        }
                     }
 
                     else -> error("Unknown attachment type: ${event.attachment?.type}")
@@ -129,11 +140,3 @@ object EventDiffCallBack : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(oldItem: Event, newItem: Event) = oldItem.id == newItem.id
     override fun areContentsTheSame(oldItem: Event, newItem: Event) = oldItem == newItem
 }
-
-//fun formatDateTime(dateTimeString: String): String {
-//    val inputFormatter = DateTimeFormatter.ISO_DATE_TIME
-//    val outputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
-//
-//    val localDateTime = LocalDateTime.parse(dateTimeString, inputFormatter)
-//    return localDateTime.format(outputFormatter)
-//}
