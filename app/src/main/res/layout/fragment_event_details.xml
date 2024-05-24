@@ -193,28 +193,6 @@
                 app:layout_constraintTop_toBottomOf="@id/likeTitle"
                 tools:text="15" />
 
-            <LinearLayout
-                android:id="@+id/usersList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@id/likeButton"
-                app:layout_constraintStart_toEndOf="@id/likeButton"
-                app:layout_constraintTop_toTopOf="@id/likeButton">
-
-                <ImageView
-                    android:id="@+id/user1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/circle_button_background"
-                    android:contentDescription="@string/description_user_s_avatar"
-                    android:padding="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ImageContrastCheck" />
-
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/mentionedTitle"
                 android:layout_width="match_parent"
@@ -242,16 +220,12 @@
 
             <LinearLayout
                 android:id="@+id/mentionedList"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@id/likeButton"
-                app:layout_constraintStart_toEndOf="@id/likeButton"
-                app:layout_constraintTop_toTopOf="@id/likeButton">
-
-                <!--TODO(икоки пользователей)-->
-
-            </LinearLayout>
+                app:layout_constraintBottom_toBottomOf="@id/usersButton"
+                app:layout_constraintStart_toEndOf="@id/usersButton"
+                app:layout_constraintTop_toTopOf="@id/usersButton" />
 
             <com.yandex.mapkit.mapview.MapView
                 android:id="@+id/mapView"

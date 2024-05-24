@@ -21,6 +21,8 @@ import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentEventDetailsBinding
 import com.github.slznvk.nework.observer.MediaLifecycleObserver
 import com.github.slznvk.nework.ui.EventsFeedFragment.Companion.EVENT_ID
+import com.github.slznvk.nework.utills.ViewExtension.createImageView
+import com.github.slznvk.nework.utills.ViewExtension.createSeeMoreUsersButton
 import com.github.slznvk.nework.utills.formatDateTime
 import com.github.slznvk.nework.utills.load
 import com.github.slznvk.nework.viewModel.AuthViewModel
@@ -34,6 +36,7 @@ import com.yandex.runtime.image.ImageProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 
 @AndroidEntryPoint
@@ -124,6 +127,29 @@ class EventDetailsFragment : Fragment() {
                             }
 
                             else -> error("Unknown attachment type: ${event.attachment?.type}")
+                        }
+                    }
+                    if (event.users.isNotEmpty()) {
+                        val usersToShow = min(event.users.size, 5) - 1
+                        val subMap = event.users.toList().take(usersToShow)
+                        subMap.forEach {
+                            mentionedList.addView(
+                                createImageView(
+                                    requireContext(),
+                                    it.second.avatar
+                                )
+                            )
+                        }
+                        val lastUser = event.users.toList().drop(usersToShow).take(1)
+                        mentionedList.addView(
+                            createImageView(
+                                requireContext(),
+                                lastUser[0].second.avatar,
+                                false
+                            )
+                        )
+                        if (event.users.size > 5) {
+                            mentionedList.addView(createSeeMoreUsersButton(requireContext()))
                         }
                     }
 

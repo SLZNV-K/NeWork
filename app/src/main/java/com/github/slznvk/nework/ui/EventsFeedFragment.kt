@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 class EventsFeedFragment : Fragment() {
     private lateinit var binding: FragmentEventsFeedBinding
     private val viewModel: EventViewModel by viewModels()
-    private val authViewModel: AuthViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

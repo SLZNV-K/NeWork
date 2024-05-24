@@ -1,7 +1,6 @@
 package com.github.slznvk.nework.ui
 
 import android.app.AlertDialog
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
@@ -9,9 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.MediaController
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -24,6 +20,8 @@ import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentPostDetailsBinding
 import com.github.slznvk.nework.observer.MediaLifecycleObserver
 import com.github.slznvk.nework.ui.PostsFeedFragment.Companion.POST_ID
+import com.github.slznvk.nework.utills.ViewExtension.createImageView
+import com.github.slznvk.nework.utills.ViewExtension.createSeeMoreUsersButton
 import com.github.slznvk.nework.utills.formatDateTime
 import com.github.slznvk.nework.utills.load
 import com.github.slznvk.nework.viewModel.AuthViewModel
@@ -129,7 +127,7 @@ class PostDetailsFragment : Fragment() {
                     }
 
                     if (post.users.isNotEmpty()) {
-                        val usersToShow = min(post.users.size, 4) - 1
+                        val usersToShow = min(post.users.size, 5) - 1
                         val subMap = post.users.toList().take(usersToShow)
                         subMap.forEach {
                             mentionedList.addView(
@@ -180,49 +178,49 @@ class PostDetailsFragment : Fragment() {
         return binding.root
     }
 
-    private fun createImageView(
-        context: Context,
-        imageUrl: String?,
-        isMargin: Boolean = true
-    ): ImageView {
-        return ImageView(context).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                40.dpToPixelsInt(context),
-                40.dpToPixelsInt(context)
-            ).apply {
-                if (isMargin) marginEnd = (-16).dpToPixelsInt(context)
-            }
-            setPadding(
-                2.dpToPixelsInt(context),
-                2.dpToPixelsInt(context),
-                2.dpToPixelsInt(context),
-                2.dpToPixelsInt(context)
-            )
-            contentDescription = context.getString(R.string.description_user_s_avatar)
-            setBackgroundResource(R.drawable.circle_button_background)
-            load(imageUrl, true)
-        }
-    }
-
-    private fun createSeeMoreUsersButton(context: Context): ImageButton {
-        return ImageButton(context).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                40.dpToPixelsInt(context),
-                40.dpToPixelsInt(context)
-            )
-            setPadding(
-                16.dpToPixelsInt(context),
-                16.dpToPixelsInt(context),
-                16.dpToPixelsInt(context),
-                16.dpToPixelsInt(context)
-            )
-            setBackgroundResource(R.drawable.circle_button_background)
-            setImageResource(R.drawable.add_icon)
-        }
-    }
-
-    private fun Int.dpToPixelsInt(context: Context): Int =
-        (this * context.resources.displayMetrics.density).toInt()
+//    private fun createImageView(
+//        context: Context,
+//        imageUrl: String?,
+//        isMargin: Boolean = true
+//    ): ImageView {
+//        return ImageView(context).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                40.dpToPixelsInt(context),
+//                40.dpToPixelsInt(context)
+//            ).apply {
+//                if (isMargin) marginEnd = (-16).dpToPixelsInt(context)
+//            }
+//            setPadding(
+//                2.dpToPixelsInt(context),
+//                2.dpToPixelsInt(context),
+//                2.dpToPixelsInt(context),
+//                2.dpToPixelsInt(context)
+//            )
+//            contentDescription = context.getString(R.string.description_user_s_avatar)
+//            setBackgroundResource(R.drawable.circle_button_background)
+//            load(imageUrl, true)
+//        }
+//    }
+//
+//    private fun createSeeMoreUsersButton(context: Context): ImageButton {
+//        return ImageButton(context).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                40.dpToPixelsInt(context),
+//                40.dpToPixelsInt(context)
+//            )
+//            setPadding(
+//                16.dpToPixelsInt(context),
+//                16.dpToPixelsInt(context),
+//                16.dpToPixelsInt(context),
+//                16.dpToPixelsInt(context)
+//            )
+//            setBackgroundResource(R.drawable.circle_button_background)
+//            setImageResource(R.drawable.add_icon)
+//        }
+//    }
+//
+//    private fun Int.dpToPixelsInt(context: Context): Int =
+//        (this * context.resources.displayMetrics.density).toInt()
 
     private fun startLocation(location: Point) {
         map.move(
