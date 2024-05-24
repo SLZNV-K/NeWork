@@ -5,33 +5,34 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import com.github.slznvk.domain.dto.AdditionalProp
 import com.github.slznvk.domain.dto.Attachment
 import com.github.slznvk.domain.dto.Coords
 import com.github.slznvk.domain.dto.Post
-import com.github.slznvk.domain.dto.Users
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 @TypeConverters(Converter::class)
 @Entity
 data class PostEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Long,
     @Embedded
     val attachment: Attachment? = null,
     val author: String,
     val authorAvatar: String?,
-    val authorId: Int,
+    val authorId: Long,
     val authorJob: String?,
     val content: String,
     @Embedded
     val coords: Coords? = null,
-    val likeOwnerIds: Int,
+    val likeOwnerIds: Long,
     val likedByMe: Boolean,
     val link: String?,
-    val mentionIds: List<Int>,
+    val mentionIds: List<Long>,
     val mentionedMe: Boolean,
     val published: String,
-    val users: Users? = null,
+    val users: Map<Long, AdditionalProp>,
     val ownedByMe: Boolean
 ) {
 
@@ -65,7 +66,7 @@ data class PostEntity(
                 authorJob = dto.authorJob,
                 content = dto.content,
                 coords = dto.coords,
-                likeOwnerIds = dto.likeOwnerIds.firstOrNull() ?: 0,
+                likeOwnerIds = dto.likeOwnerIds.firstOrNull() ?: 0L,
                 likedByMe = dto.likedByMe,
                 link = dto.link,
                 mentionIds = dto.mentionIds,
@@ -77,29 +78,30 @@ data class PostEntity(
     }
 }
 
-fun List<PostEntity>.toDto(): List<Post> = map(PostEntity::toDto)
 fun List<Post>.toEntity(): List<PostEntity> = map(PostEntity::fromDto)
 
 
 class Converter {
+    private val gson = Gson()
+
     @TypeConverter
-    fun fromListInt(list: List<Int>): String {
+    fun fromListLong(list: List<Long>): String {
         return list.joinToString(",")
     }
 
     @TypeConverter
-    fun toListInt(data: String): List<Int> {
-        return data.split(",").mapNotNull { it.toIntOrNull() }
+    fun toListLong(data: String): List<Long> {
+        return data.split(",").mapNotNull { it.toLongOrNull() }
     }
 
     @TypeConverter
-    fun fromListUsers(users: Users): String {
-        return Gson().toJson(users)
+    fun fromMap(map: Map<Long, AdditionalProp>): String {
+        return gson.toJson(map)
     }
 
     @TypeConverter
-    fun toListUsers(json: String): Users {
-        return Gson().fromJson(json, Users::class.java)
+    fun toMap(data: String): Map<Long, AdditionalProp> {
+        val mapType = object : TypeToken<Map<Long, AdditionalProp>>() {}.type
+        return gson.fromJson(data, mapType)
     }
-
 }

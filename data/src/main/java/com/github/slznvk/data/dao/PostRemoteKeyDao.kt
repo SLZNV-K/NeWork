@@ -10,10 +10,10 @@ import com.github.slznvk.data.entity.PostRemoteKeyEntity
 interface PostRemoteKeyDao {
 
     @Query("SELECT max(`key`) FROM PostRemoteKeyEntity")
-    suspend fun max(): Int?
+    suspend fun max(): Long?
 
     @Query("SELECT min(`key`) FROM PostRemoteKeyEntity")
-    suspend fun min(): Int?
+    suspend fun min(): Long?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(postRemoteKeyEntity: PostRemoteKeyEntity)

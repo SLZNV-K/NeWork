@@ -22,7 +22,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserById(id: Int): User {
+    override suspend fun getUserById(id: Long): User {
         return try {
             val response = apiService.getUserById(id)
             if (!response.isSuccessful) {
@@ -34,7 +34,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserJobs(userId: Int): List<Job> {
+    override suspend fun getUserJobs(userId: Long): List<Job> {
         return try {
             val response = apiService.getUserJobs(userId)
             if (!response.isSuccessful) {
@@ -60,7 +60,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteJodById(id: Int) {
+    override suspend fun deleteJodById(id: Long) {
         try {
             apiService.deleteJodById(id)
         } catch (e: IOException) {

@@ -66,7 +66,7 @@ class EventViewModel @Inject constructor(
     val photo: LiveData<PhotoModel?>
         get() = _photo
 
-    fun getEventById(id: Int) {
+    fun getEventById(id: Long) {
         viewModelScope.launch {
             _dataState.value = StateModel(loading = true)
             try {
@@ -91,7 +91,7 @@ class EventViewModel @Inject constructor(
         }
     }
 
-    fun removeEventById(id: Int) {
+    fun removeEventById(id: Long) {
         viewModelScope.launch {
             _dataState.value = StateModel(loading = true)
             try {

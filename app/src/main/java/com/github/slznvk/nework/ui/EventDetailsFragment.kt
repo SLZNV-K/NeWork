@@ -57,7 +57,7 @@ class EventDetailsFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[EventViewModel::class.java]
         map = binding.mapView.mapWindow.map
 
-        val id = arguments?.getInt(EVENT_ID)
+        val id = arguments?.getLong(EVENT_ID)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {

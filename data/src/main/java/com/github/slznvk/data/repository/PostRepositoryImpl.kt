@@ -38,7 +38,7 @@ class PostRepositoryImpl @Inject constructor(
         it.map(PostEntity::toDto)
     }
 
-    override suspend fun likeById(id: Int) {
+    override suspend fun likeById(id: Long) {
         dao.likeById(id)
         try {
             val response = postApiService.likePost(id)
@@ -52,7 +52,7 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun dislikeById(id: Int) {
+    override suspend fun dislikeById(id: Long) {
         dao.likeById(id)
         try {
             val response = postApiService.dislikePost(id)
@@ -66,7 +66,7 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun removeById(id: Int) {
+    override suspend fun removeById(id: Long) {
         try {
             postApiService.removePostById(id)
             dao.removeById(id)
@@ -92,8 +92,8 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPostById(id: Int) = dao.getPostById(id).toDto()
-    override suspend fun loadUserWall(authorId: Int) =
+    override suspend fun getPostById(id: Long) = dao.getPostById(id).toDto()
+    override suspend fun loadUserWall(authorId: Long) =
         data.map { pagingData -> pagingData.filter { it.authorId == authorId } }
 
 

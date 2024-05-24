@@ -39,7 +39,7 @@ class EventRepositoryImpl @Inject constructor(
         it.map(EventEntity::toDto)
     }
 
-    override suspend fun likeById(id: Int) {
+    override suspend fun likeById(id: Long) {
         eventDao.likeById(id)
         try {
             val response = apiService.likeEvent(id)
@@ -53,7 +53,7 @@ class EventRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun dislikeById(id: Int) {
+    override suspend fun dislikeById(id: Long) {
         eventDao.likeById(id)
         try {
             val response = apiService.dislikeEvent(id)
@@ -67,9 +67,7 @@ class EventRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun shareById(id: Int) {}
-
-    override suspend fun removeById(id: Int) {
+    override suspend fun removeById(id: Long) {
         try {
             apiService.removeEventById(id)
             eventDao.removeById(id)
@@ -94,5 +92,5 @@ class EventRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getEventById(id: Int): Event = eventDao.getEventById(id).toDto()
+    override suspend fun getEventById(id: Long): Event = eventDao.getEventById(id).toDto()
 }

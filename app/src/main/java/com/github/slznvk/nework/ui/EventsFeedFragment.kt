@@ -70,7 +70,7 @@ class EventsFeedFragment : Fragment() {
                         R.id.action_eventsFeedFragment_to_newEventFragment,
                         Bundle().apply {
                             putString(EVENT_CONTENT, (item as Event).content)
-                            putInt(EVENT_ID, item.id)
+                            putLong(EVENT_ID, item.id)
                         }
                     )
                 viewModel.edit(item as Event)
@@ -79,7 +79,7 @@ class EventsFeedFragment : Fragment() {
             override fun onItem(item: ListItem) {
                 findNavController().navigate(R.id.action_eventsFeedFragment_to_eventDetailsFragment,
                     Bundle().apply {
-                        putInt(EVENT_ID, item.id)
+                        putLong(EVENT_ID, item.id)
                     })
             }
 

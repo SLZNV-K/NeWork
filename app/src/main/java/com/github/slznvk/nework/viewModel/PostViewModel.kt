@@ -54,11 +54,7 @@ class PostViewModel @Inject constructor(
 
 
     private lateinit var _userWall: MutableStateFlow<PagingData<Post>>
-
-    //    val userWall: Flow<PagingData<Post>>
-//        get() = _userWall
     var userWall: Flow<PagingData<Post>>? = null
-
 
     private val _dataState = MutableLiveData<StateModel>()
     val dataState: LiveData<StateModel>
@@ -77,7 +73,7 @@ class PostViewModel @Inject constructor(
     val photo: LiveData<PhotoModel?>
         get() = _photo
 
-    fun loadUserWall(id: Int) = viewModelScope.launch {
+    fun loadUserWall(id: Long) = viewModelScope.launch {
         try {
             userWall = data.map { pagingData -> pagingData.filter { it.authorId == id } }
                 .flowOn(Dispatchers.Default)
@@ -98,7 +94,7 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    fun getPostById(id: Int) {
+    fun getPostById(id: Long) {
         viewModelScope.launch {
             try {
                 _pickedPost.postValue(postRepository.getPostById(id))
@@ -110,7 +106,7 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    fun removePostById(id: Int) {
+    fun removePostById(id: Long) {
         viewModelScope.launch {
             _dataState.value = StateModel(loading = true)
             try {

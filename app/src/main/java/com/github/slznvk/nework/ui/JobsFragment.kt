@@ -38,7 +38,7 @@ class JobsFragment : Fragment() {
         )
 
 //        TODO: получить верный id
-        val id = arguments?.getInt(USER_ID) ?: 1 //authViewModel.data.value.id
+        val id = arguments?.getLong(USER_ID) ?: 1 //authViewModel.data.value.id
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {

@@ -69,7 +69,7 @@ class PostsFeedFragment : Fragment() {
                         R.id.action_postsFeedFragment_to_newPostFragment,
                         Bundle().apply {
                             putString(POST_CONTENT, (item as Post).content)
-                            putInt(POST_ID, item.id)
+                            putLong(POST_ID, item.id)
                         }
                     )
                 viewModel.edit(item as Post)
@@ -79,7 +79,7 @@ class PostsFeedFragment : Fragment() {
                 findNavController().navigate(
                     R.id.action_postsFeedFragment_to_postDetailsFragment,
                     Bundle().apply {
-                        putInt(POST_ID, item.id)
+                        putLong(POST_ID, item.id)
                     })
             }
         }, observer = mediaObserver)

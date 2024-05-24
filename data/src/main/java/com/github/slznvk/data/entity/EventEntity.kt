@@ -4,35 +4,35 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.github.slznvk.domain.dto.AdditionalProp
 import com.github.slznvk.domain.dto.Attachment
 import com.github.slznvk.domain.dto.Coords
 import com.github.slznvk.domain.dto.Event
-import com.github.slznvk.domain.dto.Users
 
 @TypeConverters(Converter::class)
 @Entity
 data class EventEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Long,
     @Embedded
     val attachment: Attachment? = null,
     val author: String,
     val authorAvatar: String? = null,
-    val authorId: Int,
+    val authorId: Long,
     val authorJob: String? = null,
     val content: String,
     @Embedded
     val coords: Coords? = null,
     val datetime: String = "",
-    val likeOwnerIds: List<Int>,
+    val likeOwnerIds: Long,
     val likedByMe: Boolean = false,
     val link: String? = null,
-    val participantsIds: List<Int>,
+    val participantsIds: List<Long>,
     val participatedByMe: Boolean = false,
     val published: String,
-    val speakerIds: List<Int>,
+    val speakerIds: List<Long>,
     val typeEvent: String = "",
-    val users: Users? = null,
+    val users: Map<Long, AdditionalProp> = emptyMap(),
     val ownedByMe: Boolean = false,
 ) {
 
@@ -45,7 +45,7 @@ data class EventEntity(
         authorJob = authorJob,
         content = content,
         coords = coords,
-        likeOwnerIds = likeOwnerIds,
+        likeOwnerIds = listOf(likeOwnerIds),
         likedByMe = likedByMe,
         link = link,
         published = published,
@@ -69,7 +69,7 @@ data class EventEntity(
                 authorJob = dto.authorJob,
                 content = dto.content,
                 coords = dto.coords,
-                likeOwnerIds = dto.likeOwnerIds,
+                likeOwnerIds = dto.likeOwnerIds.firstOrNull() ?: 0L,
                 likedByMe = dto.likedByMe,
                 link = dto.link,
                 published = dto.published,
@@ -84,7 +84,5 @@ data class EventEntity(
     }
 }
 
-
-fun List<EventEntity>.toDto(): List<Event> = map(EventEntity::toDto)
 fun List<Event>.toEntity(): List<EventEntity> = map(EventEntity::fromDto)
 

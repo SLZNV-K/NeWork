@@ -60,14 +60,12 @@ class PostDetailsFragment : Fragment() {
 
         map = binding.mapView.mapWindow.map
 
-        val id = arguments?.getInt(POST_ID)
+        val id = arguments?.getLong(POST_ID)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
-                repeat(3) {
-                    id?.let { viewModel.getPostById(it) }
-                    delay(16)
-                }
+                delay(16)
+                id?.let { viewModel.getPostById(it) }
             }
 
             viewModel.pickedPost.observe(viewLifecycleOwner) { post ->
@@ -130,19 +128,28 @@ class PostDetailsFragment : Fragment() {
                         }
                     }
 
-                    if (post.users?.users?.isNotEmpty() == true) {
-                        val usersToShow = min(post.users!!.users.size, 5)
-                        user1.load(post.users!!.users[0].avatar, true)
-                        for (i in 1 until usersToShow) {
-                            val user = post.users!!.users[i]
-                            usersList.addView(
+                    if (post.users.isNotEmpty()) {
+                        val usersToShow = min(post.users.size, 4) - 1
+                        val subMap = post.users.toList().take(usersToShow)
+                        subMap.forEach {
+                            mentionedList.addView(
                                 createImageView(
                                     requireContext(),
-                                    user.avatar
+                                    it.second.avatar
                                 )
                             )
                         }
-                        usersList.addView(createSeeMoreUsersButton(requireContext()))
+                        val lastUser = post.users.toList().drop(usersToShow).take(1)
+                        mentionedList.addView(
+                            createImageView(
+                                requireContext(),
+                                lastUser[0].second.avatar,
+                                false
+                            )
+                        )
+                        if (post.users.size > 5) {
+                            mentionedList.addView(createSeeMoreUsersButton(requireContext()))
+                        }
                     }
 
                     likeButton.setOnClickListener {
@@ -173,13 +180,17 @@ class PostDetailsFragment : Fragment() {
         return binding.root
     }
 
-    private fun createImageView(context: Context, imageUrl: String): ImageView {
+    private fun createImageView(
+        context: Context,
+        imageUrl: String?,
+        isMargin: Boolean = true
+    ): ImageView {
         return ImageView(context).apply {
             layoutParams = LinearLayout.LayoutParams(
                 40.dpToPixelsInt(context),
                 40.dpToPixelsInt(context)
             ).apply {
-                marginStart = (-8).dpToPixelsInt(context)
+                if (isMargin) marginEnd = (-16).dpToPixelsInt(context)
             }
             setPadding(
                 2.dpToPixelsInt(context),
@@ -188,6 +199,7 @@ class PostDetailsFragment : Fragment() {
                 2.dpToPixelsInt(context)
             )
             contentDescription = context.getString(R.string.description_user_s_avatar)
+            setBackgroundResource(R.drawable.circle_button_background)
             load(imageUrl, true)
         }
     }
@@ -197,9 +209,7 @@ class PostDetailsFragment : Fragment() {
             layoutParams = LinearLayout.LayoutParams(
                 40.dpToPixelsInt(context),
                 40.dpToPixelsInt(context)
-            ).apply {
-                marginStart = (-8).dpToPixelsInt(context)
-            }
+            )
             setPadding(
                 16.dpToPixelsInt(context),
                 16.dpToPixelsInt(context),

@@ -37,7 +37,7 @@ class WallFragment : Fragment() {
     ): View {
         binding = FragmentWallBinding.inflate(layoutInflater, container, false)
 
-        val id = arguments?.getInt(USER_ID)
+        val id = arguments?.getLong(USER_ID)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
@@ -78,7 +78,7 @@ class WallFragment : Fragment() {
                         R.id.action_postsFeedFragment_to_newPostFragment,
                         Bundle().apply {
                             putString(PostsFeedFragment.POST_CONTENT, (item as Post).content)
-                            putInt(PostsFeedFragment.POST_ID, item.id)
+                            putLong(PostsFeedFragment.POST_ID, item.id)
                         }
                     )
                 postViewModel.edit(item as Post)
@@ -88,7 +88,7 @@ class WallFragment : Fragment() {
                 findNavController().navigate(
                     R.id.action_postsFeedFragment_to_postDetailsFragment,
                     Bundle().apply {
-                        putInt(PostsFeedFragment.POST_ID, item.id)
+                        putLong(PostsFeedFragment.POST_ID, item.id)
                     })
             }
         }, observer = mediaObserver)

@@ -28,7 +28,7 @@ class UsersFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_usersFragment_to_userDetailsFragment,
                 Bundle().apply {
-                    putInt(USER_ID, it.id)
+                    putLong(USER_ID, it.id)
                     putString(USER_NAME, "${it.name} / ${it.login}")
                 })
         }

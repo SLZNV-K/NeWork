@@ -10,10 +10,10 @@ import com.github.slznvk.data.entity.EventRemoteKeyEntity
 interface EventRemoteKeyDao {
 
     @Query("SELECT max(`key`) FROM EventRemoteKeyEntity")
-    suspend fun max(): Int?
+    suspend fun max(): Long?
 
     @Query("SELECT min(`key`) FROM EventRemoteKeyEntity")
-    suspend fun min(): Int?
+    suspend fun min(): Long?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(eventRemoteKeyEntity: EventRemoteKeyEntity)

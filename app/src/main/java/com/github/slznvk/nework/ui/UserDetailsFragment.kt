@@ -46,7 +46,7 @@ class UserDetailsFragment : Fragment() {
     ): View {
         binding = FragmentUserDetailsBinding.inflate(layoutInflater, container, false)
 
-        val id = arguments?.getInt(USER_ID) ?: authViewModel.data.value.id
+        val id = arguments?.getLong(USER_ID) ?: authViewModel.data.value.id
         val name = arguments?.getString(USER_NAME) ?: "You"
 
         viewLifecycleOwner.lifecycleScope.launch {

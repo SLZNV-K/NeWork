@@ -10,6 +10,6 @@ fun ImageView.load(url: String?, circleCrop: Boolean = false) {
         .load(url)
         .timeout(10_000)
         .apply { if (circleCrop) this.circleCrop() }
-        .error(R.drawable.photo_camera_icon)
+        .error(R.drawable.account_icon)
         .into(this)
 }

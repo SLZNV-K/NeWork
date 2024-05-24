@@ -59,7 +59,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun getUserById(id: Int) {
+    fun getUserById(id: Long) {
         viewModelScope.launch {
             try {
                 _pickedUser.postValue(userRepository.getUserById(id))
@@ -70,7 +70,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun getUserJobs(userId: Int) {
+    fun getUserJobs(userId: Long) {
         _jobsState.value = StateModel(loading = true)
         viewModelScope.launch {
             try {
@@ -82,7 +82,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun deleteJodById(id: Int) {
+    fun deleteJodById(id: Long) {
         viewModelScope.launch {
             _jobsState.value = StateModel(loading = true)
             try {
