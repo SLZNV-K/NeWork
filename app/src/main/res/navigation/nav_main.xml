@@ -93,5 +93,19 @@
     <fragment
         android:id="@+id/userDetailsFragment"
         android:name="com.github.slznvk.nework.ui.UserDetailsFragment"
-        android:label="UserDetailsFragment" />
+        android:label="UserDetailsFragment" >
+        <action
+            android:id="@+id/action_userDetailsFragment_to_newJobFragment"
+            app:destination="@id/newJobFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newJobFragment"
+        android:name="com.github.slznvk.nework.ui.NewJobFragment"
+        android:label="fragment_new_job"
+        tools:layout="@layout/fragment_new_job" />
+    <dialog
+        android:id="@+id/selectDateFragment"
+        android:name="com.github.slznvk.nework.ui.SelectDateFragment"
+        android:label="fragment_select_date"
+        tools:layout="@layout/fragment_select_date" />
 </navigation>

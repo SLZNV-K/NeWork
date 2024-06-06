@@ -35,11 +35,6 @@ class UserDetailsFragment : Fragment() {
     @Inject
     lateinit var appAuth: AppAuth
 
-    private val fragmentList = listOf(
-        WallFragment.newInstance(),
-        JobsFragment.newInstance()
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,7 +52,7 @@ class UserDetailsFragment : Fragment() {
             }
         }
 
-        val adapter = ViewPagerAdapter(this, fragmentList)
+        val adapter = ViewPagerAdapter(id, this)
 
         binding.apply {
             viewModel.pickedUser.observe(viewLifecycleOwner) { user ->

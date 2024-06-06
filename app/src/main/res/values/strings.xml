@@ -58,4 +58,13 @@
     <string name="description_play_pause_button">Play/pause button</string>
     <string name="description_sign_out_button">Sign out button</string>
     <string name="the_name_of_the_song">The name of the song</string>
+    <string name="position">Position</string>
+    <string name="link">Link</string>
+    <string name="create">Create</string>
+    <string name="end_date">end date</string>
+    <string name="date_start">date start</string>
+    <string name="select_date">Select date</string>
+    <string name="enter_dates">Enter dates</string>
+    <string name="description_calendar_icon">Calendar icon</string>
+    <string name="ok">OK</string>
 </resources>

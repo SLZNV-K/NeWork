@@ -56,4 +56,13 @@
     <string name="description_play_pause_button">Кнопка воспроизведение/пауза</string>
     <string name="description_sign_out_button">Кнопка выхода</string>
     <string name="the_name_of_the_song">Название песни</string>
+    <string name="position">Должность</string>
+    <string name="link">Ссылка</string>
+    <string name="create">Создать</string>
+    <string name="end_date">дата окончания</string>
+    <string name="date_start">дата начала</string>
+    <string name="select_date">Выбор даты</string>
+    <string name="enter_dates">Введите даты</string>
+    <string name="description_calendar_icon">Иконка календаря</string>
+    <string name="ok">ОК</string>
 </resources>

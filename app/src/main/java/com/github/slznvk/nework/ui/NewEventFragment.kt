@@ -83,7 +83,7 @@ class NewEventFragment : Fragment() {
             }
 
             chooseUsersButton.setOnClickListener {
-//                TODO: переход на выбор пользователей
+//                TODO: переход на пользователей
             }
 
             chooseLocationButton.setOnClickListener {

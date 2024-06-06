@@ -46,7 +46,6 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
                 }
             }
         }
-
     }
 
     private fun showDatePickerDialog() {

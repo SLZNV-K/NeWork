@@ -17,7 +17,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -52,8 +51,6 @@ class PostViewModel @Inject constructor(
         }
     }
 
-
-    private lateinit var _userWall: MutableStateFlow<PagingData<Post>>
     var userWall: Flow<PagingData<Post>>? = null
 
     private val _dataState = MutableLiveData<StateModel>()

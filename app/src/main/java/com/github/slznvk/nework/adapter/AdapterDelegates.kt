@@ -29,7 +29,7 @@ object AdapterDelegates {
         }
 
     //    fun jobsDelegate(isAuthorized: Boolean) =
-    fun jobsDelegate(itemClickedListener: (Job) -> Unit) =
+    fun jobsDelegate(itemClickedListener: (Job) -> Unit, isAuthorized: Boolean) =
         adapterDelegateViewBinding<Job, ListItem, CardJobBinding>(
             { layoutInflater, root -> CardJobBinding.inflate(layoutInflater, root, false) }
         ) {
@@ -44,7 +44,7 @@ object AdapterDelegates {
                     position.text = item.position
                     link.text = item.link
                     link.isVisible = item.link != null
-//                    removeButton.isVisible = isAuthorized
+                    removeButton.isVisible = isAuthorized
                 }
             }
         }

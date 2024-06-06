@@ -64,10 +64,8 @@ class EventDetailsFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
-                repeat(3) {
-                    id?.let { viewModel.getEventById(it) }
-                    delay(16)
-                }
+                delay(16)
+                id?.let { viewModel.getEventById(it) }
             }
 
             viewModel.pickedEvent.observe(viewLifecycleOwner) { event ->
@@ -201,10 +199,10 @@ class EventDetailsFragment : Fragment() {
         val marker = createBitmapFromVector(R.drawable.location_icon)
         mapObjectCollection =
             binding.mapView.mapWindow.map.mapObjects
-        placeMarkMapObject = mapObjectCollection.addPlacemark(
-            location,
-            ImageProvider.fromBitmap(marker)
-        )
+        placeMarkMapObject = mapObjectCollection.addPlacemark().apply {
+            geometry = location
+            setIcon(ImageProvider.fromBitmap(marker))
+        }
         placeMarkMapObject.opacity = 0.5f
     }
 
