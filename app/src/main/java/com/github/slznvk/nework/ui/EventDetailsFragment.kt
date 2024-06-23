@@ -5,20 +5,22 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.MediaController
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.slznvk.domain.dto.AttachmentType
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentEventDetailsBinding
+import com.github.slznvk.nework.observer.MediaLifecycleObserver
 import com.github.slznvk.nework.ui.EventsFeedFragment.Companion.EVENT_ID
+import com.github.slznvk.nework.utills.ViewExtension.createImageView
+import com.github.slznvk.nework.utills.ViewExtension.createSeeMoreUsersButton
 import com.github.slznvk.nework.utills.formatDateTime
 import com.github.slznvk.nework.utills.load
 import com.github.slznvk.nework.viewModel.AuthViewModel
@@ -30,35 +32,31 @@ import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.runtime.image.ImageProvider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 
 @AndroidEntryPoint
-class EventDetailsFragment : Fragment() {
-    private lateinit var binding: FragmentEventDetailsBinding
+class EventDetailsFragment : Fragment(R.layout.fragment_event_details) {
+    private val binding by viewBinding(FragmentEventDetailsBinding::bind)
     private lateinit var map: Map
     private lateinit var mapObjectCollection: MapObjectCollection
     private lateinit var placeMarkMapObject: PlacemarkMapObject
-    private lateinit var viewModel: EventViewModel
+    private val viewModel: EventViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentEventDetailsBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(requireActivity())[EventViewModel::class.java]
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val mediaObserver = MediaLifecycleObserver()
+        lifecycle.addObserver(mediaObserver)
         map = binding.mapView.mapWindow.map
 
-        val id = arguments?.getInt(EVENT_ID)
+        val id = arguments?.getLong(EVENT_ID)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
-                repeat(3) {
-                    id?.let { viewModel.getEventById(it) }
-                    delay(16)
-                }
+                id?.let { viewModel.getEventById(it) }
             }
 
             viewModel.pickedEvent.observe(viewLifecycleOwner) { event ->
@@ -69,42 +67,81 @@ class EventDetailsFragment : Fragment() {
                     published.text = event.published.formatDateTime()
                     avatar.load(event.authorAvatar, true)
                     content.text = event.content
+                    content.isVisible = event.content != ""
                     likeButton.isChecked = event.likedByMe
                     likeButton.text = event.likeOwnerIds.size.toString()
                     usersButton.text = event.participantsIds.size.toString()
-                    eventType.text = event.type
+                    eventType.text = event.type.value
+
+                    imageAttachment.visibility = View.GONE
+                    videoAttachment.visibility = View.GONE
+                    audioAttachment.visibility = View.GONE
 
                     if (event.attachment != null) {
                         when (event.attachment?.type) {
-                            AttachmentType.IMAGE -> {
-                                imageAttachment.visibility = View.VISIBLE
-                                videoAttachment.visibility = View.GONE
-                                imageAttachment.load(event.attachment!!.url)
+                            AttachmentType.IMAGE -> imageAttachment.apply {
+                                visibility = View.VISIBLE
+                                load(event.attachment?.url)
                             }
 
-                            AttachmentType.VIDEO -> {
-                                videoAttachment.visibility = View.VISIBLE
-                                imageAttachment.visibility = View.GONE
-                                videoAttachment.apply {
-                                    setMediaController(MediaController(context))
-                                    setVideoURI(Uri.parse(event.attachment?.url))
-                                    setOnPreparedListener {
-                                        start()
-                                    }
-                                    setOnCompletionListener {
-                                        stopPlayback()
-                                    }
+                            AttachmentType.VIDEO -> videoAttachment.apply {
+                                visibility = View.VISIBLE
+                                setMediaController(MediaController(context))
+                                setVideoURI(Uri.parse(event.attachment?.url))
+                                setOnPreparedListener {
+                                    start()
+                                }
+                                setOnCompletionListener {
+                                    stopPlayback()
                                 }
                             }
 
                             AttachmentType.AUDIO -> {
-                                videoAttachment.visibility = View.GONE
-                                imageAttachment.visibility = View.GONE
+                                audioAttachment.visibility = View.VISIBLE
+
+                                playPauseButton.setOnClickListener {
+                                    mediaObserver.playSong(
+                                        event.attachment!!.url,
+                                        event.songPlaying
+                                    )
+                                    event.songPlaying = !event.songPlaying
+                                    playPauseButton.setImageResource(
+                                        if (event.songPlaying) {
+                                            R.drawable.pause_icon
+                                        } else {
+                                            R.drawable.play_icon
+                                        }
+                                    )
+                                }
                             }
 
-                            null -> error("Unknown attachment type: ${event.attachment?.type}")
+                            else -> error("Unknown attachment type: ${event.attachment?.type}")
                         }
                     }
+                    if (event.users.isNotEmpty()) {
+                        val usersToShow = min(event.users.size, 5) - 1
+                        val subMap = event.users.toList().take(usersToShow)
+                        subMap.forEach {
+                            mentionedList.addView(
+                                createImageView(
+                                    requireContext(),
+                                    it.second.avatar
+                                )
+                            )
+                        }
+                        val lastUser = event.users.toList().drop(usersToShow).take(1)
+                        mentionedList.addView(
+                            createImageView(
+                                requireContext(),
+                                lastUser[0].second.avatar,
+                                false
+                            )
+                        )
+                        if (event.users.size > 5) {
+                            mentionedList.addView(createSeeMoreUsersButton(requireContext()))
+                        }
+                    }
+
                     likeButton.setOnClickListener {
                         if (authViewModel.authenticated) {
                             viewModel.likeEventById(event)
@@ -133,8 +170,6 @@ class EventDetailsFragment : Fragment() {
                 }
             }
         }
-
-        return binding.root
     }
 
     private fun startLocation(location: Point) {
@@ -153,10 +188,10 @@ class EventDetailsFragment : Fragment() {
         val marker = createBitmapFromVector(R.drawable.location_icon)
         mapObjectCollection =
             binding.mapView.mapWindow.map.mapObjects
-        placeMarkMapObject = mapObjectCollection.addPlacemark(
-            location,
-            ImageProvider.fromBitmap(marker)
-        )
+        placeMarkMapObject = mapObjectCollection.addPlacemark().apply {
+            geometry = location
+            setIcon(ImageProvider.fromBitmap(marker))
+        }
         placeMarkMapObject.opacity = 0.5f
     }
 

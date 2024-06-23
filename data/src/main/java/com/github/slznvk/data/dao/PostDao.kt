@@ -13,7 +13,7 @@ interface PostDao {
     fun getPagingSource(): PagingSource<Int, PostEntity>
 
     @Query("SELECT * FROM PostEntity WHERE id = :id")
-    suspend fun getPostById(id: Int): PostEntity
+    suspend fun getPostById(id: Long): PostEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: PostEntity)
@@ -21,17 +21,7 @@ interface PostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(posts: List<PostEntity>)
 
-    @Query(
-        """
-           UPDATE PostEntity SET
-               likeOwnerIds = likeOwnerIds + CASE WHEN likedByMe THEN -1 ELSE 1 END,
-               likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
-           WHERE id = :id;
-        """
-    )
-    suspend fun likeById(id: Int)
-
     @Query("DELETE FROM PostEntity WHERE id = :id")
-    suspend fun removeById(id: Int)
+    suspend fun removeById(id: Long)
 
 }

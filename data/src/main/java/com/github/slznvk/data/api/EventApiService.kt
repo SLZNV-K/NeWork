@@ -16,13 +16,13 @@ interface EventApiService {
 
     @GET("api/events/{id}/before")
     suspend fun getBeforeEvents(
-        @Path("id") id: Int,
+        @Path("id") id: Long,
         @Query("count") count: Int
     ): Response<List<Event>>
 
     @GET("api/events/{id}/after")
     suspend fun getAfterEvents(
-        @Path("id") id: Int,
+        @Path("id") id: Long,
         @Query("count") count: Int
     ): Response<List<Event>>
 
@@ -30,12 +30,12 @@ interface EventApiService {
     suspend fun saveEvent(@Body event: Event): Response<Event>
 
     @DELETE("api/events/{id}")
-    suspend fun removeEventById(@Path("id") id: Int)
+    suspend fun removeEventById(@Path("id") id: Long)
 
     @POST("api/events/{id}/likes")
-    suspend fun likeEvent(@Path("id") id: Int): Response<Event>
+    suspend fun likeEvent(@Path("id") id: Long): Response<Event>
 
     @DELETE("api/events/{id}/likes")
-    suspend fun dislikeEvent(@Path("id") id: Int): Response<Event>
+    suspend fun dislikeEvent(@Path("id") id: Long): Response<Event>
 
 }

@@ -14,7 +14,7 @@ interface EventDao {
     fun getPagingSource(): PagingSource<Int, EventEntity>
 
     @Query("SELECT * FROM EventEntity WHERE id = :id")
-    suspend fun getEventById(id: Int): EventEntity
+    suspend fun getEventById(id: Long): EventEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(event: EventEntity)
@@ -22,17 +22,7 @@ interface EventDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(events: List<EventEntity>)
 
-    @Query(
-        """
-           UPDATE EventEntity SET
-               likeOwnerIds = likeOwnerIds + CASE WHEN likedByMe THEN -1 ELSE 1 END,
-               likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
-           WHERE id = :id;
-        """
-    )
-    suspend fun likeById(id: Int)
-
     @Query("DELETE FROM EventEntity WHERE id = :id")
-    suspend fun removeById(id: Int)
+    suspend fun removeById(id: Long)
 
 }

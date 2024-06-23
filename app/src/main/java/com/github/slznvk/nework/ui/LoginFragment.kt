@@ -1,32 +1,26 @@
 package com.github.slznvk.nework.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentLoginBinding
 import com.github.slznvk.nework.viewModel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
-
-    private lateinit var binding: FragmentLoginBinding
+class LoginFragment : Fragment(R.layout.fragment_login) {
+    private val binding by viewBinding(FragmentLoginBinding::bind)
     private val authViewModel: AuthViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         with(binding) {
-            regiatrationButton.setOnClickListener {
+            registrationButton.setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
             }
 
@@ -34,7 +28,7 @@ class LoginFragment : Fragment() {
             val pass = password.text
 
             signInButton.setOnClickListener {
-                if (log.isBlank() || pass.isBlank()) {
+                if (log.isNullOrBlank() || pass.isNullOrBlank()) {
                     Toast.makeText(
                         context,
                         getString(R.string.fields_cannot_be_empty),
@@ -60,6 +54,5 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-        return binding.root
     }
 }

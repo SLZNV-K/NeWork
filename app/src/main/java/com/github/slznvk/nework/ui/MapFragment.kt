@@ -3,15 +3,20 @@ package com.github.slznvk.nework.ui
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentMapBinding
+import com.github.slznvk.nework.ui.NewEventFragment.Companion.FRAGMENT_EVENT
+import com.github.slznvk.nework.ui.NewPostFragment.Companion.FRAGMENT_POST
+import com.github.slznvk.nework.ui.UsersFragment.Companion.FRAGMENT_TYPE
+import com.github.slznvk.nework.viewModel.EventViewModel
+import com.github.slznvk.nework.viewModel.PostViewModel
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.layers.GeoObjectTapListener
@@ -25,11 +30,13 @@ import com.yandex.runtime.image.ImageProvider
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MapFragment : Fragment() {
-    private lateinit var binding: FragmentMapBinding
+class MapFragment : Fragment(R.layout.fragment_map) {
+    private val binding by viewBinding(FragmentMapBinding::bind)
     private lateinit var map: Map
     private lateinit var mapObjectCollection: MapObjectCollection
     private lateinit var placeMarkMapObject: PlacemarkMapObject
+    private val postViewModel: PostViewModel by viewModels()
+    private val eventViewModel: EventViewModel by viewModels()
 
     private val mapObjectTapListener = MapObjectTapListener { _, point ->
         arguments?.putDouble(LATITUDE, point.latitude)
@@ -56,13 +63,9 @@ class MapFragment : Fragment() {
             false
         }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentMapBinding.inflate(layoutInflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         map = binding.mapView.mapWindow.map
-
         val mapKit = MapKitFactory.getInstance()
         val userLocationLayer = mapKit.createUserLocationLayer(binding.mapView.mapWindow)
         userLocationLayer.isVisible = true
@@ -70,11 +73,21 @@ class MapFragment : Fragment() {
 
         map.addTapListener(geoObjectTapListener)
 
+        val type = arguments?.getString(FRAGMENT_TYPE)
+
         binding.savePointButton.setOnClickListener {
-            //TODO: сохранение Point
+            val long = arguments?.getDouble(LONGITUDE)
+            val lat = arguments?.getDouble(LATITUDE)
+            if (long != null && lat != null) {
+                when (type) {
+                    FRAGMENT_POST -> postViewModel.addPoint(lat, long)
+                    FRAGMENT_EVENT -> eventViewModel.addPoint(lat, long)
+                    else -> {}
+                }
+            }
+
             findNavController().navigateUp()
         }
-        return binding.root
     }
 
     private fun startLocation(location: Point?) {
@@ -136,6 +149,7 @@ class MapFragment : Fragment() {
                 toolbar.visibility = View.VISIBLE
             }
         }
+        arguments?.clear()
     }
 
 

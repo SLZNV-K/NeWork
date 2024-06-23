@@ -73,15 +73,36 @@
                 app:layout_constraintTop_toBottomOf="@id/author"
                 tools:text="Android Developer" />
 
-            <ViewStub
-                android:id="@+id/stubView"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/audioAttachment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inflatedId="@+id/inflatedView"
-                android:layout="@layout/stub_audio"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/avatar" />
+                app:layout_constraintTop_toBottomOf="@id/avatar">
+
+                <ImageButton
+                    android:id="@+id/playPauseButton"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/description_play_pause_button"
+                    android:src="@drawable/play_icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/songName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/the_name_of_the_song"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/playPauseButton"
+                    app:layout_constraintStart_toEndOf="@id/playPauseButton"
+                    app:layout_constraintTop_toTopOf="@id/playPauseButton" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <VideoView
                 android:id="@+id/videoAttachment"
@@ -90,7 +111,7 @@
                 android:layout_marginTop="@dimen/common_spacing"
                 android:contentDescription="@string/description_materials_attached_to_the_post"
                 android:scaleType="centerCrop"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/avatar"
@@ -103,7 +124,7 @@
                 android:layout_marginTop="@dimen/common_spacing"
                 android:contentDescription="@string/description_materials_attached_to_the_post"
                 android:scaleType="centerCrop"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/avatar"
@@ -114,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="avatar,videoAttachment, imageAttachment, stubView" />
+                app:constraint_referenced_ids="avatar,videoAttachment, imageAttachment, audioAttachment" />
 
             <TextView
                 android:id="@+id/published"
@@ -162,28 +183,6 @@
                 app:layout_constraintTop_toBottomOf="@id/likeTitle"
                 tools:text="15" />
 
-            <LinearLayout
-                android:id="@+id/usersList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@id/likeButton"
-                app:layout_constraintStart_toEndOf="@id/likeButton"
-                app:layout_constraintTop_toTopOf="@id/likeButton">
-
-                <ImageView
-                    android:id="@+id/user1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/circle_button_background"
-                    android:contentDescription="@string/description_user_s_avatar"
-                    android:padding="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ImageContrastCheck" />
-
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/mentionedTitle"
                 android:layout_width="match_parent"
@@ -211,16 +210,12 @@
 
             <LinearLayout
                 android:id="@+id/mentionedList"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@id/likeButton"
-                app:layout_constraintStart_toEndOf="@id/likeButton"
-                app:layout_constraintTop_toTopOf="@id/likeButton">
-
-                <!--TODO(икоки пользователей)-->
-
-            </LinearLayout>
+                app:layout_constraintBottom_toBottomOf="@id/usersButton"
+                app:layout_constraintStart_toEndOf="@id/usersButton"
+                app:layout_constraintTop_toTopOf="@id/usersButton" />
 
             <com.yandex.mapkit.mapview.MapView
                 android:id="@+id/mapView"

@@ -8,20 +8,23 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
 import androidx.paging.map
+import com.github.slznvk.domain.dto.AdditionalProp
+import com.github.slznvk.domain.dto.Coords
 import com.github.slznvk.domain.dto.Post
 import com.github.slznvk.domain.repository.PostRepository
 import com.github.slznvk.nework.auth.AppAuth
 import com.github.slznvk.nework.model.PhotoModel
 import com.github.slznvk.nework.model.StateModel
+import com.github.slznvk.nework.utills.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.time.Instant
 import javax.inject.Inject
 
 private val empty = Post(
@@ -29,7 +32,7 @@ private val empty = Post(
     authorId = 0,
     content = "",
     author = "",
-    published = "",
+    published = Instant.now().toString(),
     likeOwnerIds = emptyList(),
     mentionIds = emptyList()
 )
@@ -52,13 +55,7 @@ class PostViewModel @Inject constructor(
         }
     }
 
-
-    private lateinit var _userWall: MutableStateFlow<PagingData<Post>>
-
-    //    val userWall: Flow<PagingData<Post>>
-//        get() = _userWall
     var userWall: Flow<PagingData<Post>>? = null
-
 
     private val _dataState = MutableLiveData<StateModel>()
     val dataState: LiveData<StateModel>
@@ -69,7 +66,7 @@ class PostViewModel @Inject constructor(
         get() = _pickedPost
 
     private val edited = MutableLiveData<Post>()
-    private val _postCreated = MutableLiveData<Unit>()
+    private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
@@ -77,7 +74,7 @@ class PostViewModel @Inject constructor(
     val photo: LiveData<PhotoModel?>
         get() = _photo
 
-    fun loadUserWall(id: Int) = viewModelScope.launch {
+    fun loadUserWall(id: Long) = viewModelScope.launch {
         try {
             userWall = data.map { pagingData -> pagingData.filter { it.authorId == id } }
                 .flowOn(Dispatchers.Default)
@@ -98,7 +95,7 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    fun getPostById(id: Int) {
+    fun getPostById(id: Long) {
         viewModelScope.launch {
             try {
                 _pickedPost.postValue(postRepository.getPostById(id))
@@ -110,7 +107,7 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    fun removePostById(id: Int) {
+    fun removePostById(id: Long) {
         viewModelScope.launch {
             _dataState.value = StateModel(loading = true)
             try {
@@ -119,6 +116,12 @@ class PostViewModel @Inject constructor(
             } catch (e: Exception) {
                 _dataState.value = StateModel(error = true)
             }
+        }
+    }
+
+    fun addUsers(users: Map<Long, AdditionalProp>) {
+        edited.value?.let {
+            edited.value = it.copy(users = users)
         }
     }
 
@@ -152,6 +155,12 @@ class PostViewModel @Inject constructor(
             if (text != post.content) {
                 edited.value = post.copy(content = text)
             }
+        }
+    }
+
+    fun addPoint(lat: Double, long: Double) {
+        edited.value?.let {
+            edited.value = it.copy(coords = Coords(lat, long))
         }
     }
 

@@ -20,20 +20,14 @@ interface UserApiService {
     @GET("api/users")
     suspend fun getAllUsers(): Response<List<User>>
 
-    @GET("api/users/{id}")
-    suspend fun getUserById(@Path("id") id: Int): Response<User>
-
     @GET("api/{userId}/jobs")
-    suspend fun getUserJobs(@Path("userId") userId: Int): Response<List<Job>>
-
-//    @GET("api/{authorId}/wall")
-//    suspend fun getUserWall(@Path("authorId") authorId: Int): Response<List<Post>>
+    suspend fun getUserJobs(@Path("userId") userId: Long): Response<List<Job>>
 
     @POST("api/my/jobs")
     suspend fun saveJob(@Body job: Job): Response<Job>
 
     @DELETE("api/my/jobs")
-    suspend fun deleteJodById(@Path("id") id: Int)
+    suspend fun deleteJodById(@Path("id") id: Long)
 
 
     //AUTH

@@ -120,18 +120,21 @@
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/description_lication_button"
+            android:contentDescription="@string/description_location_button"
             app:icon="@drawable/location_icon"
             app:iconTint="@color/black"
             tools:ignore="RedundantDescriptionCheck" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addDateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
             android:contentDescription="@string/description_add_an_event_date"
             android:src="@drawable/add_icon" />
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

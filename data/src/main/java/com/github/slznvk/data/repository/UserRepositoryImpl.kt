@@ -1,6 +1,9 @@
 package com.github.slznvk.data.repository
 
 import com.github.slznvk.data.api.UserApiService
+import com.github.slznvk.data.dao.UserDao
+import com.github.slznvk.data.entity.UserEntity.Companion.fromDto
+import com.github.slznvk.data.entity.UserEntity.Companion.toEntity
 import com.github.slznvk.domain.dto.Job
 import com.github.slznvk.domain.dto.User
 import com.github.slznvk.domain.repository.UserRepository
@@ -8,7 +11,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val apiService: UserApiService
+    private val apiService: UserApiService,
+    private val dao: UserDao
 ) : UserRepository {
     override suspend fun getAllUsers(): List<User> {
         return try {
@@ -16,25 +20,24 @@ class UserRepositoryImpl @Inject constructor(
             if (!response.isSuccessful) {
                 throw Exception()
             }
-            response.body() ?: throw Exception()
+
+            val body = response.body() ?: throw Exception()
+            dao.insert(body.toEntity())
+            body
         } catch (e: Exception) {
             throw e
         }
     }
 
-    override suspend fun getUserById(id: Int): User {
+    override suspend fun getUserById(id: Long): User {
         return try {
-            val response = apiService.getUserById(id)
-            if (!response.isSuccessful) {
-                throw Exception()
-            }
-            response.body() ?: throw Exception()
+            dao.getUserById(id).toDto()
         } catch (e: Exception) {
             throw e
         }
     }
 
-    override suspend fun getUserJobs(userId: Int): List<Job> {
+    override suspend fun getUserJobs(userId: Long): List<Job> {
         return try {
             val response = apiService.getUserJobs(userId)
             if (!response.isSuccessful) {
@@ -44,6 +47,10 @@ class UserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             throw e
         }
+    }
+
+    override suspend fun saveUser(user: User) {
+        dao.insert(fromDto(user))
     }
 
     override suspend fun saveJob(job: Job) {
@@ -60,7 +67,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteJodById(id: Int) {
+    override suspend fun deleteJodById(id: Long) {
         try {
             apiService.deleteJodById(id)
         } catch (e: IOException) {

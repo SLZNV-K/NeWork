@@ -6,10 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
     val data: Flow<PagingData<Event>>
-    suspend fun likeById(id: Int)
-    suspend fun dislikeById(id: Int)
-    suspend fun shareById(id: Int)
-    suspend fun removeById(id: Int)
+    suspend fun likeById(id: Long)
+    suspend fun dislikeById(id: Long)
+    suspend fun removeById(id: Long)
     suspend fun save(event: Event)
-    suspend fun getEventById(id: Int): Event
+    suspend fun getEventById(id: Long): Event
 }

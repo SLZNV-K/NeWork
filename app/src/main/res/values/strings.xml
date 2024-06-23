@@ -19,10 +19,9 @@
     <string name="description_take_photo_button">Photo take button</string>
     <string name="description_save_button">Save button</string>
     <string name="description_choose_users_button">User selection button</string>
-    <string name="description_lication_button">Location button</string>
+    <string name="description_location_button">Location button</string>
     <string name="description_take_attachment_button">Take attachment button</string>
     <string name="description_share_button">Share button</string>
-    <string name="description_account_button">Account button</string>
     <string name="retry">Retry</string>
     <string name="error_of_loading">Error of loading</string>
     <string name="delete">Delete</string>
@@ -33,24 +32,20 @@
     <string name="looking_for_a_job">Looking for a job</string>
     <string name="registration">Registration</string>
     <string name="have_an_account">Already have an account? Sign in</string>
-    <string name="passwordCheck">Password check</string>
     <string name="passwords_don_t_match">Passwords don\'t match</string>
     <string name="fields_cannot_be_empty">Fields can\'t be empty</string>
     <string name="invalid_login">Invalid login</string>
     <string name="invalid_password">Invalid password</string>
     <string name="a_user_with_this_username_already_exists">A user with this username already exists</string>
     <string name="sign_out">Sign out</string>
-    <string name="if_you_exit_now_progress_will_be_lost">If you exit now progress will be lost</string>
     <string name="get_out_anyway">Get out anyway</string>
     <string name="event">Event</string>
     <string name="participants">Participants</string>
     <string name="new_event">New event</string>
     <string name="description_add_an_event_date">Add an event date</string>
-    <string name="type">Type</string>
     <string name="online" translatable="false">Online</string>
     <string name="offline" translatable="false">Offline</string>
     <string name="date_hint">date</string>
-    <string name="description_date_picker">Date picker</string>
     <string name="description_save_selected_point_button">Save selected point button</string>
     <string name="wall">Wall</string>
     <string name="jobs">Jobs</string>
@@ -58,4 +53,16 @@
     <string name="description_play_pause_button">Play/pause button</string>
     <string name="description_sign_out_button">Sign out button</string>
     <string name="the_name_of_the_song">The name of the song</string>
+    <string name="position">Position</string>
+    <string name="link">Link</string>
+    <string name="create">Create</string>
+    <string name="end_date">end date</string>
+    <string name="date_start">date start</string>
+    <string name="select_date">Select date</string>
+    <string name="enter_dates">Enter dates</string>
+    <string name="description_calendar_icon">Calendar icon</string>
+    <string name="ok">OK</string>
+    <string name="text_must_no_be_blank">Text must no be blank</string>
+    <string name="experience_period" translatable="false">%1$s - %2$s</string>
+    <string name="now">Now</string>
 </resources>

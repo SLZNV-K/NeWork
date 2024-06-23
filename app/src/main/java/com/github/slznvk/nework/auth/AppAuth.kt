@@ -20,7 +20,7 @@ class AppAuth @Inject constructor(
         get() = _authState
 
     init {
-        val id = prefs.getInt(KEY_ID, 0)
+        val id = prefs.getLong(KEY_ID, 0)
         val token = prefs.getString(KEY_TOKEN, null)
 
         if (token == null) {
@@ -35,10 +35,10 @@ class AppAuth @Inject constructor(
     }
 
     @Synchronized
-    fun setAuth(id: Int, token: String) {
+    fun setAuth(id: Long, token: String) {
         _authState.value = AuthState(id, token)
         with(prefs.edit()) {
-            putInt(KEY_ID, id)
+            putLong(KEY_ID, id)
             putString(KEY_TOKEN, token)
             commit()
         }

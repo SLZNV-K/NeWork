@@ -17,24 +17,27 @@ interface PostApiService {
 
     @GET("api/posts/{id}/before")
     suspend fun getBeforePosts(
-        @Path("id") id: Int,
+        @Path("id") id: Long,
         @Query("count") count: Int
     ): Response<List<Post>>
 
     @GET("api/posts/{id}/after")
-    suspend fun getAfterPosts(@Path("id") id: Int, @Query("count") count: Int): Response<List<Post>>
+    suspend fun getAfterPosts(
+        @Path("id") id: Long,
+        @Query("count") count: Int
+    ): Response<List<Post>>
 
     @POST("api/posts")
     suspend fun savePost(@Body post: Post): Response<Post>
 
     @DELETE("api/posts/{id}")
-    suspend fun removePostById(@Path("id") id: Int)
+    suspend fun removePostById(@Path("id") id: Long)
 
     @POST("api/posts/{id}/likes")
-    suspend fun likePost(@Path("id") id: Int): Response<Post>
+    suspend fun likePost(@Path("id") id: Long): Response<Post>
 
     @DELETE("api/posts/{id}/likes")
-    suspend fun dislikePost(@Path("id") id: Int): Response<Post>
+    suspend fun dislikePost(@Path("id") id: Long): Response<Post>
 
 
 //    //WALL
