@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.slznvk.domain.dto.AttachmentType
 import com.github.slznvk.domain.dto.Event
+import com.github.slznvk.domain.dto.EventType
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.CardEventBinding
 import com.github.slznvk.nework.observer.MediaLifecycleObserver
@@ -89,7 +90,7 @@ class EventsViewHolder(
                 }
             }
 
-            type.text = event.type
+            type.text = event.type.value
             datetime.text = event.datetime.formatDateTime()
 
             link.isVisible = event.link != null
@@ -102,7 +103,7 @@ class EventsViewHolder(
                 onInteractionListener.onLike(event)
             }
 
-            playButton.isVisible = event.type == "ONLINE"
+            playButton.isVisible = event.type == EventType.ONLINE
 
             if (!event.ownedByMe) {
                 menu.isVisible = false

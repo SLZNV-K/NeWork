@@ -2,9 +2,7 @@ package com.github.slznvk.nework.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.slznvk.domain.dto.Event
 import com.github.slznvk.domain.dto.ListItem
 import com.github.slznvk.nework.R
@@ -28,17 +27,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class EventsFeedFragment : Fragment() {
-    private lateinit var binding: FragmentEventsFeedBinding
+class EventsFeedFragment : Fragment(R.layout.fragment_events_feed) {
+
+    private val binding by viewBinding(FragmentEventsFeedBinding::bind)
     private val viewModel: EventViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentEventsFeedBinding.inflate(layoutInflater, container, false)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val mediaObserver = MediaLifecycleObserver()
         lifecycle.addObserver(mediaObserver)
 
@@ -84,7 +80,7 @@ class EventsFeedFragment : Fragment() {
 
         }, observer = mediaObserver)
 
-        binding.apply {
+        with(binding) {
 
             recyclerEvents.adapter = adapter
             recyclerEvents.layoutManager =
@@ -114,8 +110,6 @@ class EventsFeedFragment : Fragment() {
             addEventButton.setOnClickListener {
                 findNavController().navigate(R.id.action_eventsFeedFragment_to_newEventFragment)
             }
-
-            return root
         }
     }
 

@@ -2,15 +2,14 @@ package com.github.slznvk.nework.ui
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentRegistrationBinding
@@ -22,16 +21,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class RegistrationFragment : Fragment() {
-
-    private lateinit var binding: FragmentRegistrationBinding
+class RegistrationFragment : Fragment(R.layout.fragment_registration) {
+    private val binding by viewBinding(FragmentRegistrationBinding::bind)
     private val authViewModel: AuthViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentRegistrationBinding.inflate(layoutInflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
 
@@ -73,29 +68,27 @@ class RegistrationFragment : Fragment() {
             }
 
             registerButton.setOnClickListener {
-                if (password.equals(passwordConfirmation)) {
+                if (login.isNullOrBlank() || name.isNullOrBlank() ||
+                    password.isNullOrBlank() || passwordConfirmation.isNullOrBlank()) {
+                    Toast.makeText(
+                        context,
+                        getString(R.string.fields_cannot_be_empty),
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else if (password == passwordConfirmation) {
                     Toast.makeText(
                         context,
                         getString(R.string.passwords_don_t_match),
                         Toast.LENGTH_LONG
                     ).show()
-                } else
-                    if (login.isBlank() || name.isBlank() ||
-                        password.isBlank() || passwordConfirmation.isBlank()
-                    ) {
-                        Toast.makeText(
-                            context,
-                            getString(R.string.fields_cannot_be_empty),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        authViewModel.registration(
-                            login.toString(),
-                            password.toString(),
-                            name.toString(),
-                            photo
-                        )
-                    }
+                } else {
+                    authViewModel.registration(
+                        login.toString(),
+                        password.toString(),
+                        name.toString(),
+                        photo
+                    )
+                }
             }
             authViewModel.authStateModel.observe(viewLifecycleOwner) { state ->
                 if (state.error) {
@@ -113,7 +106,6 @@ class RegistrationFragment : Fragment() {
                 }
             }
 
-            return root
         }
     }
 }

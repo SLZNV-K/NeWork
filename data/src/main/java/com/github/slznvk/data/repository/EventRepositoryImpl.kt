@@ -40,29 +40,27 @@ class EventRepositoryImpl @Inject constructor(
     }
 
     override suspend fun likeById(id: Long) {
-        eventDao.likeById(id)
         try {
             val response = apiService.likeEvent(id)
             if (!response.isSuccessful) {
                 throw Error()
             }
-            response.body() ?: throw Error()
+            val updateLikesEvent = response.body() ?: throw Error()
+            eventDao.insert(fromDto(updateLikesEvent))
         } catch (e: Exception) {
-            eventDao.likeById(id)
             throw Error()
         }
     }
 
     override suspend fun dislikeById(id: Long) {
-        eventDao.likeById(id)
         try {
             val response = apiService.dislikeEvent(id)
             if (!response.isSuccessful) {
                 throw Error()
             }
-            response.body() ?: throw Error()
+            val updateLikesEvent = response.body() ?: throw Error()
+            eventDao.insert(fromDto(updateLikesEvent))
         } catch (e: Exception) {
-            eventDao.likeById(id)
             throw Error()
         }
     }

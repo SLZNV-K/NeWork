@@ -26,9 +26,6 @@ interface UserApiService {
     @GET("api/{userId}/jobs")
     suspend fun getUserJobs(@Path("userId") userId: Long): Response<List<Job>>
 
-//    @GET("api/{authorId}/wall")
-//    suspend fun getUserWall(@Path("authorId") authorId: Int): Response<List<Post>>
-
     @POST("api/my/jobs")
     suspend fun saveJob(@Body job: Job): Response<Job>
 

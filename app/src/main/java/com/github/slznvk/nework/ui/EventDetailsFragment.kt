@@ -5,17 +5,15 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.MediaController
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.slznvk.domain.dto.AttachmentType
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentEventDetailsBinding
@@ -34,37 +32,30 @@ import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.runtime.image.ImageProvider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.min
 
 
 @AndroidEntryPoint
-class EventDetailsFragment : Fragment() {
-    private lateinit var binding: FragmentEventDetailsBinding
+class EventDetailsFragment : Fragment(R.layout.fragment_event_details) {
+    private val binding by viewBinding(FragmentEventDetailsBinding::bind)
     private lateinit var map: Map
     private lateinit var mapObjectCollection: MapObjectCollection
     private lateinit var placeMarkMapObject: PlacemarkMapObject
-    private lateinit var viewModel: EventViewModel
+    private val viewModel: EventViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentEventDetailsBinding.inflate(layoutInflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val mediaObserver = MediaLifecycleObserver()
         lifecycle.addObserver(mediaObserver)
-
-        viewModel = ViewModelProvider(requireActivity())[EventViewModel::class.java]
         map = binding.mapView.mapWindow.map
 
         val id = arguments?.getLong(EVENT_ID)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
-                delay(16)
                 id?.let { viewModel.getEventById(it) }
             }
 
@@ -80,7 +71,7 @@ class EventDetailsFragment : Fragment() {
                     likeButton.isChecked = event.likedByMe
                     likeButton.text = event.likeOwnerIds.size.toString()
                     usersButton.text = event.participantsIds.size.toString()
-                    eventType.text = event.type
+                    eventType.text = event.type.value
 
                     imageAttachment.visibility = View.GONE
                     videoAttachment.visibility = View.GONE
@@ -179,8 +170,6 @@ class EventDetailsFragment : Fragment() {
                 }
             }
         }
-
-        return binding.root
     }
 
     private fun startLocation(location: Point) {

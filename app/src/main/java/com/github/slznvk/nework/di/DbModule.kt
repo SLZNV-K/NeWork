@@ -6,6 +6,7 @@ import com.github.slznvk.data.dao.EventDao
 import com.github.slznvk.data.dao.EventRemoteKeyDao
 import com.github.slznvk.data.dao.PostDao
 import com.github.slznvk.data.dao.PostRemoteKeyDao
+import com.github.slznvk.data.dao.UserDao
 import com.github.slznvk.data.db.AppDb
 import dagger.Module
 import dagger.Provides
@@ -39,4 +40,7 @@ class DbModule {
 
     @Provides
     fun provideEventRemoteKeyDao(appDb: AppDb): EventRemoteKeyDao = appDb.eventRemoteKeyDao()
+
+    @Provides
+    fun provideUserDao(appDb: AppDb): UserDao = appDb.userDao()
 }

@@ -39,29 +39,29 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun likeById(id: Long) {
-        dao.likeById(id)
+
         try {
             val response = postApiService.likePost(id)
             if (!response.isSuccessful) {
                 throw Error()
             }
-            response.body() ?: throw Error()
+            val updateLikesPost = response.body() ?: throw Error()
+            dao.insert(fromDto(updateLikesPost))
         } catch (e: Exception) {
-            dao.likeById(id)
             throw Error()
         }
     }
 
     override suspend fun dislikeById(id: Long) {
-        dao.likeById(id)
         try {
             val response = postApiService.dislikePost(id)
             if (!response.isSuccessful) {
                 throw Error()
             }
             response.body() ?: throw Error()
+            val updateLikesPost = response.body() ?: throw Error()
+            dao.insert(fromDto(updateLikesPost))
         } catch (e: Exception) {
-            dao.likeById(id)
             throw Error()
         }
     }
@@ -86,7 +86,6 @@ class PostRepositoryImpl @Inject constructor(
             }
             val body = response.body() ?: throw Exception()
             dao.insert(fromDto(body))
-
         } catch (e: Exception) {
             throw e
         }

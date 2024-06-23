@@ -22,16 +22,6 @@ interface EventDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(events: List<EventEntity>)
 
-    @Query(
-        """
-           UPDATE EventEntity SET
-               likeOwnerIds = likeOwnerIds + CASE WHEN likedByMe THEN -1 ELSE 1 END,
-               likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
-           WHERE id = :id;
-        """
-    )
-    suspend fun likeById(id: Long)
-
     @Query("DELETE FROM EventEntity WHERE id = :id")
     suspend fun removeById(id: Long)
 

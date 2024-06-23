@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".ui.EventDetailsFragment">
 
@@ -12,7 +11,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,6 +35,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:background="?attr/colorOnSecondary"
             android:layout_height="wrap_content">
 
             <ImageView
@@ -116,7 +115,8 @@
                     android:contentDescription="@string/description_play_pause_button"
                     android:src="@drawable/play_icon"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="RedundantDescriptionCheck" />
 
                 <TextView
                     android:id="@+id/songName"
@@ -166,7 +166,8 @@
                 android:autoLink="web"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/published"
-                tools:text="@tools:sample/lorem[34]" />
+                tools:text="@tools:sample/lorem[34]"
+                tools:ignore="VisualLintLongText" />
 
             <TextView
                 android:id="@+id/likeTitle"

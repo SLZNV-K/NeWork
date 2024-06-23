@@ -5,9 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.MediaController
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -15,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.slznvk.domain.dto.AttachmentType
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentPostDetailsBinding
@@ -39,20 +38,17 @@ import kotlinx.coroutines.launch
 import kotlin.math.min
 
 @AndroidEntryPoint
-class PostDetailsFragment : Fragment() {
-    private lateinit var binding: FragmentPostDetailsBinding
+class PostDetailsFragment : Fragment(R.layout.fragment_post_details) {
+
+    private val binding by viewBinding(FragmentPostDetailsBinding::bind)
     private val viewModel: PostViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var map: Map
     private lateinit var mapObjectCollection: MapObjectCollection
     private lateinit var placeMarkMapObject: PlacemarkMapObject
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentPostDetailsBinding.inflate(layoutInflater, container, false)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val mediaObserver = MediaLifecycleObserver()
         lifecycle.addObserver(mediaObserver)
 
@@ -62,7 +58,6 @@ class PostDetailsFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
-                delay(16)
                 id?.let { viewModel.getPostById(it) }
             }
 
@@ -76,7 +71,7 @@ class PostDetailsFragment : Fragment() {
                     content.text = post.content
                     content.isVisible = post.content != ""
                     likeButton.isChecked = post.likedByMe
-                    likeButton.text = post.likeOwnerIds.first().toString()
+                    likeButton.text = post.likeOwnerIds.size.toString()
                     usersButton.text = post.mentionIds.size.toString()
 
                     toolbar.setNavigationOnClickListener {
@@ -174,53 +169,7 @@ class PostDetailsFragment : Fragment() {
                 }
             }
         }
-
-        return binding.root
     }
-
-//    private fun createImageView(
-//        context: Context,
-//        imageUrl: String?,
-//        isMargin: Boolean = true
-//    ): ImageView {
-//        return ImageView(context).apply {
-//            layoutParams = LinearLayout.LayoutParams(
-//                40.dpToPixelsInt(context),
-//                40.dpToPixelsInt(context)
-//            ).apply {
-//                if (isMargin) marginEnd = (-16).dpToPixelsInt(context)
-//            }
-//            setPadding(
-//                2.dpToPixelsInt(context),
-//                2.dpToPixelsInt(context),
-//                2.dpToPixelsInt(context),
-//                2.dpToPixelsInt(context)
-//            )
-//            contentDescription = context.getString(R.string.description_user_s_avatar)
-//            setBackgroundResource(R.drawable.circle_button_background)
-//            load(imageUrl, true)
-//        }
-//    }
-//
-//    private fun createSeeMoreUsersButton(context: Context): ImageButton {
-//        return ImageButton(context).apply {
-//            layoutParams = LinearLayout.LayoutParams(
-//                40.dpToPixelsInt(context),
-//                40.dpToPixelsInt(context)
-//            )
-//            setPadding(
-//                16.dpToPixelsInt(context),
-//                16.dpToPixelsInt(context),
-//                16.dpToPixelsInt(context),
-//                16.dpToPixelsInt(context)
-//            )
-//            setBackgroundResource(R.drawable.circle_button_background)
-//            setImageResource(R.drawable.add_icon)
-//        }
-//    }
-//
-//    private fun Int.dpToPixelsInt(context: Context): Int =
-//        (this * context.resources.displayMetrics.density).toInt()
 
     private fun startLocation(location: Point) {
         map.move(

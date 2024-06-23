@@ -17,8 +17,13 @@ data class Event(
     val participatedByMe: Boolean = false,
     val published: String,
     val speakerIds: List<Long>,
-    val type: String = "",
+    val type: EventType = EventType.ONLINE,
     val users: Map<Long, AdditionalProp> = emptyMap(),
     val ownedByMe: Boolean = false,
     var songPlaying: Boolean = false
 ) : ListItem
+
+enum class EventType(val value: String) {
+    OFFLINE("OFFLINE"),
+    ONLINE("ONLINE"),
+}

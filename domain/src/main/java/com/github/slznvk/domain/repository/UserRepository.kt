@@ -12,4 +12,6 @@ interface UserRepository {
     suspend fun saveJob(job: Job)
 
     suspend fun deleteJodById(id: Long)
+
+    suspend fun saveUser(user: User)
 }

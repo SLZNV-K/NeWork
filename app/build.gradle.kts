@@ -93,6 +93,8 @@ dependencies {
     implementation(libs.maps.mobile)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    implementation(libs.viewbindingpropertydelegate.noreflection)
+    implementation(libs.viewbindingpropertydelegate.full)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

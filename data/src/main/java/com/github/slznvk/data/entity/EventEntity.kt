@@ -8,6 +8,7 @@ import com.github.slznvk.domain.dto.AdditionalProp
 import com.github.slznvk.domain.dto.Attachment
 import com.github.slznvk.domain.dto.Coords
 import com.github.slznvk.domain.dto.Event
+import com.github.slznvk.domain.dto.EventType
 
 @TypeConverters(Converter::class)
 @Entity
@@ -24,14 +25,14 @@ data class EventEntity(
     @Embedded
     val coords: Coords? = null,
     val datetime: String = "",
-    val likeOwnerIds: Long,
+    val likeOwnerIds: List<Long>,
     val likedByMe: Boolean = false,
     val link: String? = null,
     val participantsIds: List<Long>,
     val participatedByMe: Boolean = false,
     val published: String,
     val speakerIds: List<Long>,
-    val typeEvent: String = "",
+    val typeEvent: EventType,
     val users: Map<Long, AdditionalProp> = emptyMap(),
     val ownedByMe: Boolean = false,
 ) {
@@ -45,7 +46,7 @@ data class EventEntity(
         authorJob = authorJob,
         content = content,
         coords = coords,
-        likeOwnerIds = listOf(likeOwnerIds),
+        likeOwnerIds = likeOwnerIds,
         likedByMe = likedByMe,
         link = link,
         published = published,
@@ -69,7 +70,7 @@ data class EventEntity(
                 authorJob = dto.authorJob,
                 content = dto.content,
                 coords = dto.coords,
-                likeOwnerIds = dto.likeOwnerIds.firstOrNull() ?: 0L,
+                likeOwnerIds = dto.likeOwnerIds,
                 likedByMe = dto.likedByMe,
                 link = dto.link,
                 published = dto.published,

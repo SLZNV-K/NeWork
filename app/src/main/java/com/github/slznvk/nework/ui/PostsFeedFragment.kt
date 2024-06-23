@@ -2,9 +2,7 @@ package com.github.slznvk.nework.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.slznvk.domain.dto.ListItem
 import com.github.slznvk.domain.dto.Post
 import com.github.slznvk.nework.R
@@ -28,14 +27,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostsFeedFragment : Fragment() {
-    private lateinit var binding: FragmentPostsFeedBinding
+class PostsFeedFragment : Fragment(R.layout.fragment_posts_feed) {
+    private val binding by viewBinding(FragmentPostsFeedBinding::bind)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentPostsFeedBinding.inflate(layoutInflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val viewModel: PostViewModel by activityViewModels()
         val authViewModel: AuthViewModel by activityViewModels()
 
@@ -84,12 +81,12 @@ class PostsFeedFragment : Fragment() {
             }
         }, observer = mediaObserver)
 
-        binding.apply {
+        with(binding) {
             recyclerPosts.adapter = adapter
             recyclerPosts.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-            swiperefresh.setOnRefreshListener(adapter::refresh)
+            swipeRefresh.setOnRefreshListener(adapter::refresh)
 
             viewModel.dataState.observe(viewLifecycleOwner) {
                 errorText.isVisible = it.error
@@ -105,7 +102,7 @@ class PostsFeedFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     adapter.loadStateFlow.collectLatest { state ->
-                        swiperefresh.isRefreshing =
+                        swipeRefresh.isRefreshing =
                             state.refresh is LoadState.Loading
                     }
                 }
@@ -126,7 +123,6 @@ class PostsFeedFragment : Fragment() {
                     }.create().show()
                 }
             }
-            return root
         }
     }
 

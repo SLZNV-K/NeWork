@@ -58,12 +58,12 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Wall" />
+                    android:text="@string/wall" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Jobs" />
+                    android:text="@string/jobs" />
             </com.google.android.material.tabs.TabLayout>
 
 

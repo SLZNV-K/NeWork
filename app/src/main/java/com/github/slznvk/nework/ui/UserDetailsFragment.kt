@@ -2,14 +2,13 @@ package com.github.slznvk.nework.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.slznvk.nework.R
 import com.github.slznvk.nework.adapter.ViewPagerAdapter
 import com.github.slznvk.nework.auth.AppAuth
@@ -21,32 +20,27 @@ import com.github.slznvk.nework.viewModel.AuthViewModel
 import com.github.slznvk.nework.viewModel.UserViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserDetailsFragment : Fragment() {
-    private lateinit var binding: FragmentUserDetailsBinding
-
+class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
+    private val binding by viewBinding(FragmentUserDetailsBinding::bind)
     private val viewModel: UserViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
 
     @Inject
     lateinit var appAuth: AppAuth
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentUserDetailsBinding.inflate(layoutInflater, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val id = arguments?.getLong(USER_ID) ?: authViewModel.data.value.id
         val name = arguments?.getString(USER_NAME) ?: "You"
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
-                delay(16)
                 viewModel.getUserById(id)
                 viewModel.getUserJobs(id)
             }
@@ -84,8 +78,6 @@ class UserDetailsFragment : Fragment() {
                     setCancelable(true)
                 }.create().show()
             }
-
-            return root
         }
     }
 

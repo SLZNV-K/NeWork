@@ -52,9 +52,9 @@ class PostsViewHolder(
             author.text = post.author
             published.text = post.published.formatDateTime()
             content.text = post.content
-            content.isVisible = post.content != ""
+            content.isVisible = post.content.isNotBlank()
 
-            likeButton.text = post.likeOwnerIds.first().toString()
+            likeButton.text = post.likeOwnerIds.size.toString()
             likeButton.isChecked = post.likedByMe
 
             likeButton.setOnClickListener {

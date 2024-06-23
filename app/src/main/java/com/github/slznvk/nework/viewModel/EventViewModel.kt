@@ -7,17 +7,25 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.github.slznvk.domain.dto.AdditionalProp
+import com.github.slznvk.domain.dto.Coords
 import com.github.slznvk.domain.dto.Event
+import com.github.slznvk.domain.dto.EventType
 import com.github.slznvk.domain.repository.EventRepository
 import com.github.slznvk.nework.auth.AppAuth
 import com.github.slznvk.nework.model.PhotoModel
 import com.github.slznvk.nework.model.StateModel
+import com.github.slznvk.nework.utills.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 private val empty = Event(
@@ -25,7 +33,7 @@ private val empty = Event(
     authorId = 0,
     content = "",
     author = "",
-    published = "",
+    published = Instant.now().toString(),
     likeOwnerIds = emptyList(),
     participantsIds = emptyList(),
     speakerIds = emptyList(),
@@ -58,7 +66,7 @@ class EventViewModel @Inject constructor(
         get() = _pickedEvent
 
     private val edited = MutableLiveData<Event>()
-    private val _eventCreated = MutableLiveData<Unit>()
+    private val _eventCreated = SingleLiveEvent<Unit>()
     val eventCreated: LiveData<Unit>
         get() = _eventCreated
 
@@ -136,15 +144,35 @@ class EventViewModel @Inject constructor(
         }
     }
 
-    fun changeTypeEvent(type: String) {
+    fun changeTypeEvent(type: EventType) {
         edited.value?.let { event ->
             edited.value = event.copy(type = type)
         }
     }
 
+    private val pickerFormat = DateTimeFormatter.ofPattern("d/M/yyyy")
+
     fun changeDateEvent(date: String) {
         edited.value?.let { event ->
-            edited.value = event.copy(datetime = date)
+            edited.value = event.copy(
+                datetime = LocalDate.parse(date, pickerFormat)
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toString(),
+                published = Instant.now().toString(),
+            )
+        }
+    }
+
+    fun addUsers(users: Map<Long, AdditionalProp>) {
+        edited.value?.let {
+            edited.value = it.copy(users = users)
+        }
+    }
+
+    fun addPoint(lat: Double, long: Double) {
+        edited.value?.let {
+            edited.value = it.copy(coords = Coords(lat, long))
         }
     }
 

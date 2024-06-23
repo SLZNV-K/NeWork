@@ -82,6 +82,18 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun saveUser(user: User){
+        viewModelScope.launch {
+            _jobsState.value = StateModel(loading = true)
+            try {
+                userRepository.saveUser(user)
+                _jobsState.value = StateModel()
+            } catch (e: Exception) {
+                _jobsState.value = StateModel(error = true)
+            }
+        }
+    }
+
     fun deleteJodById(id: Long) {
         viewModelScope.launch {
             _jobsState.value = StateModel(loading = true)

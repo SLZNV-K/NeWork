@@ -3,14 +3,11 @@ package com.github.slznvk.data.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.github.slznvk.domain.dto.AdditionalProp
 import com.github.slznvk.domain.dto.Attachment
 import com.github.slznvk.domain.dto.Coords
 import com.github.slznvk.domain.dto.Post
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 @TypeConverters(Converter::class)
 @Entity
@@ -26,7 +23,7 @@ data class PostEntity(
     val content: String,
     @Embedded
     val coords: Coords? = null,
-    val likeOwnerIds: Long,
+    val likeOwnerIds: List<Long>,
     val likedByMe: Boolean,
     val link: String?,
     val mentionIds: List<Long>,
@@ -45,7 +42,7 @@ data class PostEntity(
         authorJob = authorJob,
         content = content,
         coords = coords,
-        likeOwnerIds = listOf(likeOwnerIds),
+        likeOwnerIds = likeOwnerIds,
         likedByMe = likedByMe,
         link = link,
         mentionIds = mentionIds,
@@ -66,7 +63,7 @@ data class PostEntity(
                 authorJob = dto.authorJob,
                 content = dto.content,
                 coords = dto.coords,
-                likeOwnerIds = dto.likeOwnerIds.firstOrNull() ?: 0L,
+                likeOwnerIds = dto.likeOwnerIds,
                 likedByMe = dto.likedByMe,
                 link = dto.link,
                 mentionIds = dto.mentionIds,
@@ -79,29 +76,3 @@ data class PostEntity(
 }
 
 fun List<Post>.toEntity(): List<PostEntity> = map(PostEntity::fromDto)
-
-
-class Converter {
-    private val gson = Gson()
-
-    @TypeConverter
-    fun fromListLong(list: List<Long>): String {
-        return list.joinToString(",")
-    }
-
-    @TypeConverter
-    fun toListLong(data: String): List<Long> {
-        return data.split(",").mapNotNull { it.toLongOrNull() }
-    }
-
-    @TypeConverter
-    fun fromMap(map: Map<Long, AdditionalProp>): String {
-        return gson.toJson(map)
-    }
-
-    @TypeConverter
-    fun toMap(data: String): Map<Long, AdditionalProp> {
-        val mapType = object : TypeToken<Map<Long, AdditionalProp>>() {}.type
-        return gson.fromJson(data, mapType)
-    }
-}

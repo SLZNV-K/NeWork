@@ -2,23 +2,20 @@ package com.github.slznvk.nework.ui
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.github.slznvk.nework.R
 import com.github.slznvk.nework.databinding.FragmentSelectDateBinding
 import java.util.Calendar
 
-class SelectDateFragment : DialogFragment() {
-    private lateinit var binding: FragmentSelectDateBinding
+class SelectDateFragment : DialogFragment(R.layout.fragment_select_date) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSelectDateBinding.inflate(layoutInflater, container, false)
+    private val binding by viewBinding(FragmentSelectDateBinding::bind)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         with(binding) {
             dateStartPicker.setOnClickListener {
                 showDatePickerDialog(it as EditText)
@@ -27,8 +24,6 @@ class SelectDateFragment : DialogFragment() {
             dateEndPicker.setOnClickListener {
                 showDatePickerDialog(it as EditText)
             }
-
-            return root
         }
     }
 

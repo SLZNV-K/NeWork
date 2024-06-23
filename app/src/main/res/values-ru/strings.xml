@@ -19,10 +19,9 @@
     <string name="description_take_photo_button">Кнопка выбора фото</string>
     <string name="description_save_button">Кнопка сохранения</string>
     <string name="description_choose_users_button">Кнопка выбора пользователей</string>
-    <string name="description_lication_button">Кнопка локации</string>
+    <string name="description_location_button">Кнопка локации</string>
     <string name="description_take_attachment_button">Кнопка прикрепения файлов</string>
     <string name="description_share_button">Кнопка поделиться</string>
-    <string name="description_account_button">Кнопка аккаунта</string>
     <string name="retry">Повторить</string>
     <string name="error_of_loading">Ошибка загрузки</string>
     <string name="delete">Удалить</string>
@@ -40,15 +39,12 @@
     <string name="invalid_password">Неверный пароль</string>
     <string name="a_user_with_this_username_already_exists">Пользователь с таким логином уже существует</string>
     <string name="sign_out">Выйти</string>
-    <string name="if_you_exit_now_progress_will_be_lost">Если вы выйдете сейчас, ваш прогресс будет потерян</string>
     <string name="get_out_anyway">Выйти все равно</string>
     <string name="event">Событие</string>
     <string name="participants">Участники</string>
     <string name="new_event">Новое событие</string>
     <string name="description_add_an_event_date">Добавить дату события</string>
-    <string name="type">Тип</string>
     <string name="date_hint">дата</string>
-    <string name="description_date_picker">Выбор даты</string>
     <string name="description_save_selected_point_button">Кнопка сохранения выбранной точки</string>
     <string name="wall">Стена</string>
     <string name="jobs">Работы</string>
@@ -65,4 +61,6 @@
     <string name="enter_dates">Введите даты</string>
     <string name="description_calendar_icon">Иконка календаря</string>
     <string name="ok">ОК</string>
+    <string name="text_must_no_be_blank">Текст не может быть пустым</string>
+    <string name="now">НВ</string>
 </resources>
