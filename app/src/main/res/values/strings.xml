@@ -32,7 +32,6 @@
     <string name="looking_for_a_job">Looking for a job</string>
     <string name="registration">Registration</string>
     <string name="have_an_account">Already have an account? Sign in</string>
-    <string name="passwordCheck">Password check</string>
     <string name="passwords_don_t_match">Passwords don\'t match</string>
     <string name="fields_cannot_be_empty">Fields can\'t be empty</string>
     <string name="invalid_login">Invalid login</string>

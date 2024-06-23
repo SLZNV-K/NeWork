@@ -32,7 +32,6 @@
     <string name="looking_for_a_job">В поиске работы</string>
     <string name="registration">Регистрация</string>
     <string name="have_an_account">Уже есть аккаунт? Войти</string>
-    <string name="passwordCheck">Подтверждение пароля</string>
     <string name="passwords_don_t_match">Пароли не совпадают</string>
     <string name="fields_cannot_be_empty">Поля не могут быть пустыми</string>
     <string name="invalid_login">Неверный логин</string>

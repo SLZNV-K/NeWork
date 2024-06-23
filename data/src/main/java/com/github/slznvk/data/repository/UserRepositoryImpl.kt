@@ -2,7 +2,6 @@ package com.github.slznvk.data.repository
 
 import com.github.slznvk.data.api.UserApiService
 import com.github.slznvk.data.dao.UserDao
-import com.github.slznvk.data.entity.UserEntity
 import com.github.slznvk.data.entity.UserEntity.Companion.fromDto
 import com.github.slznvk.data.entity.UserEntity.Companion.toEntity
 import com.github.slznvk.domain.dto.Job
@@ -50,7 +49,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveUser(user: User){
+    override suspend fun saveUser(user: User) {
         dao.insert(fromDto(user))
     }
 

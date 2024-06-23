@@ -20,9 +20,6 @@ interface UserApiService {
     @GET("api/users")
     suspend fun getAllUsers(): Response<List<User>>
 
-    @GET("api/users/{id}")
-    suspend fun getUserById(@Path("id") id: Long): Response<User>
-
     @GET("api/{userId}/jobs")
     suspend fun getUserJobs(@Path("userId") userId: Long): Response<List<Job>>
 

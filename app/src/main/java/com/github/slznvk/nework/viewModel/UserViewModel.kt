@@ -82,7 +82,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun saveUser(user: User){
+    fun saveUser(user: User) {
         viewModelScope.launch {
             _jobsState.value = StateModel(loading = true)
             try {
@@ -125,17 +125,25 @@ class UserViewModel @Inject constructor(
         _editedJob.value = empty
     }
 
-    fun changeContent(
-        name: String, position: String, start: String, finish: String, link: String
+    fun changeContentJob(
+        name: String, position: String, link: String
     ) {
         _editedJob.value?.let { job ->
             _editedJob.value =
                 job.copy(
                     name = name,
                     position = position,
-                    start = start,
-                    finish = finish,
                     link = link
+                )
+        }
+    }
+
+    fun changeDateJob(startDate: String, finishDate: String?) {
+        _editedJob.value?.let { job ->
+            _editedJob.value =
+                job.copy(
+                    start = startDate,
+                    finish = finishDate
                 )
         }
     }
